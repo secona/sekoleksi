@@ -46,4 +46,6 @@ TODO
 TODO
 
 ## ➡️ Model dalam Django dan ORM
-TODO
+Object-Relational Mapping (ORM) adalah teknik yang memetakan tabel-tabel dalam database ke objek-objek dalam suatu program, di mana objek ini adalah _instance_ dari suatu _class_ dalam bahasa pemrograman. ORM memungkinkan pengembang untuk berinteraksi dengan database menggunakan konsep-konsep OOP, tanpa harus menulis query SQL secara manual. Proses ini mengabstraksikan berbagai operasi _database_, seperti _create_, _read_, _update_, dan _delete_.
+
+Dalam Django, model-model yang didefinisikan sebagai _class_ berfungsi sebagai ORM, di mana setiap _class_ merepresentasikan tabel dalam _database_. Melalui model-model ini, pengembang dapat berinteraksi dengan database hanya dengan memanggil method-method yang tersedia pada _class_ model. Django akan secara otomatis mentranslasikan metode-metode tersebut menjadi query SQL yang akan dijalankan di database. Hasil query tersebut kemudian dipetakan ke atribut-atribut dalam class, sehingga mengakses data dari tabel semudah mengakses atribut pada class Python biasa.
