@@ -6,6 +6,8 @@ E-Commerce Application made with Django
 
 http://muhammad-vito31-sekoleksi.pbp.cs.ui.ac.id/
 
+NOTE: deployment belum bisa di-_update_
+
 ## ➡️ Langkah Implementasi
 
 #### :one: Membuat sebuah proyek Django baru
