@@ -4,9 +4,7 @@ E-Commerce Application made with Django
 
 #### 🚀 Deployment
 
-http://muhammad-vito31-sekoleksi.pbp.cs.ui.ac.id/
-
-NOTE: deployment belum bisa di-_update_
+http://muhammad-vito31-sekoleksi1.pbp.cs.ui.ac.id/
 
 ## ➡️ Langkah Implementasi
 
