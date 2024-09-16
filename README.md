@@ -2,11 +2,11 @@
 
 E-Commerce Application made with Django
 
-#### 🚀 Deployment
+:rocket: http://muhammad-vito31-sekoleksi.pbp.cs.ui.ac.id
 
-http://muhammad-vito31-sekoleksi1.pbp.cs.ui.ac.id/
+## :blue_book: Tugas 2
 
-## ➡️ Langkah Implementasi
+### ➡️ Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial).
 
 #### :one: Membuat sebuah proyek Django baru
 Pembuatan proyek Django baru dilakukan dengan menjalankan perintah `django-admin startproject <nama_proyek> .` dengan `<nama_proyek>` diganti dengan nama proyek yang diinginkan, untuk proyek ini `sekoleksi`. `.` di akhir perintah menandakan bahwa proyek akan dibuat di direktori di mana perintah tersebut dijalankan.
@@ -36,7 +36,7 @@ Deployment ke PWS dilakukan dengan pertama membuat projek baru di PWS. Lalu, men
 #### :eight: Membuat sebuah `README.md` yang berisi tautan menuju aplikasi PWS yang sudah di-_deploy_, serta jawaban dari beberapa pertanyaan berikut
 Membuat file `README.md` dari GitHub web dan menambahkan teks yang dibutuhkan.
 
-## ➡️ Client Request Diagram
+### ➡️ Buatlah bagan yang berisi _request client_ ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara `urls.py`, `views.py`, `models.py`, dan berkas `html`.
 ![image](https://github.com/user-attachments/assets/c17825ad-e24d-4cf3-a0b4-c34f8df6bdcf)
 
 1. **Request dari Client** &mdash; Client akan melakukan request ke server yang akan di-_handle_ oleh Django, dimulai dari `urls.py` yang berada di proyek atau aplikasi yang sesuai.
@@ -45,19 +45,36 @@ Membuat file `README.md` dari GitHub web dan menambahkan teks yang dibutuhkan.
 4. **Render Template** &mdash; Setelah data selesai diproses, `views.py` akan menggunakan template dari HTML template yang berada di folder `templates/` untuk menyusun respons. Template ini dapat diisi dengan data yang telah diproses dan variabel-variabel lain yang dibutuhkan.
 5. **Response ke Client** &mdash; Setelah template HTML selesai di-_render_, Django akan mengirimkan response akhir kembali ke client berupa halaman HTML yang sudah lengkap dengan data yang diminta.
 
-## ➡️ Git dalam Pengembangan Perangkat Lunak
+### ➡️ Jelaskan fungsi `git` dalam pengembangan perangkat lunak!
 Pada dasarnya git adalah sistem kontrol versi yang digunakan untuk melacak perubahan file menggunakan _commit_. Setiap kali pengembang melakukan _commit_, Git menyimpan versi dari file saat itu, memungkinkan untuk melacak setiap perubahan yang terjadi selama pengembangan. Jika pengembang melakukan kesalahan atau ingin kembali ke versi sebelumnya, Git dengan menggunakan perintah _revert_ yang akan memulihkan versi file tertentu, seolah-olah perubahan setelahnya tidak pernah terjadi, tanpa menghapus riwayat kerja yang sudah ada.
 
 Git memiliki fitur yang bernama _branching_ yang berfungsi untuk membuat cabang yang terpisah dari cabang utama proyek. Dengan _branching_, pengembangan fitur dapat dilakukan di cabang terpisah yang tidak mempengaruhi cabang utama proyek. Setelah fitur selesai dikembangkan dan layak untuk di-_deploy_, pengembang dapat melakukan _merge_ untuk menggabungkan cabang tersebut kembali ke cabang utama. Jika pengembangan fitur tersebut dibatalkan, cabang yang sudah dibuat dapat dihapus dan ini tidak akan mempengaruhi kode lain yang sudah ada di proyek.
 
 Git juga dapat digunakan dengan platform Git, seperti GitHub, GitLab, atau BitBucket, yang memfasilitasi kolaborasi dalam pengembangan proyek. Platform-platform tersebut memudahkan pengembang untuk bekerja dalam tim pada proyek yang sama. Platform-platform tersebut menyediakan fitur seperti Issues untuk pelacakan _bug_ dan tugas, Pull Request untuk _review_ code dan _merge_ ke cabang utama, dan CI/CD untuk otomatisasi pengujian dan _deployment_.
 
-## ➡️ Mengapa Django?
+### ➡️ Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
 Pertama, Django menggunakan bahasa pemrograman Python, yang populer karena kesederhanaannya. Dengan menggunakan Python, Django menjadi lebih mudah untuk dipahami sebagai permulaan dari pengembangan perangkat lunak.
 
 Kedua, Django sudah memiliki banyak fitur bawaan, seperti otentikasi, URL _routing_, ORM, admin panel, dan form handling. Hal ini memungkinkan pengembang untuk lebih fokus pada pengembangan aplikasi dibandingkan mengatur dan membangun fitur-fitur tersebut dari nol.
 
 Ketiga, Django memiliki komunitas aktif yang cukup besar. Komunitas tersebut memberikan banyak sumber belajar terkait Django, seperti tutorial, forum, blog, dan lain sebagainya.
 
-## ➡️ Model dalam Django dan ORM
+### ➡️ Mengapa model pada Django disebut sebagai ORM?
 Object-Relational Mapping (ORM) adalah teknik yang memetakan tabel-tabel dalam database ke objek-objek dalam suatu program, di mana objek ini adalah instance dari suatu class dalam bahasa pemrograman. Dalam konteks Django, model adalah class Python yang dipetakan ke tabel dalam database yang digunakan. Melalui model-model ini, pengembang dapat berinteraksi dengan database hanya dengan memanggil method-method yang tersedia pada class model. Django akan secara otomatis mentranslasikan metode-metode tersebut menjadi query SQL yang akan dijalankan di database. Sebagai contoh, ketika pengembang ingin menyimpan sebuah objek, Django akan mengonversi objek Python menjadi kolom dalam database. Sebaliknya, ketika pengembang ingin mendapatkan data, Django akan mengonversi kolom dalam database menjadi objek Python. Pendekatan ini menyederhanakan pengelolaan data, mengabstraksikan kompleksitas query SQL, dan mempercepat pengembangan aplikasi.
+
+## :blue_book: Tugas 3
+
+### :arrow_right: Jelaskan mengapa kita memerlukan _data delivery_ dalam pengimplementasian sebuah platform?
+TODO
+
+### :arrow_right: Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+TODO
+
+### :arrow_right: Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?
+TODO
+
+### :arrow_right: Mengapa kita membutuhkan `csrf_token` saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan `csrf_token` pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+TODO
+
+### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial).
+TODO
