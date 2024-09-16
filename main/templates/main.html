@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h1>sekoleksi</h1>
 
 <h5>NPM: </h5>
@@ -6,3 +10,28 @@
 <p>{{ name }}<p>
 <h5>Class: </h5>
 <p>{{ class }}<p>
+
+{% if not products %}
+<p>Belum ada produk</p>
+{% else %}
+<table>
+  <tr>
+    <th>Nama Produk</th>
+    <th>Harga</th>
+    <th>Deskripsi</th>
+  </tr>
+  {% for product in products %}
+  <tr>
+    <td>{{ product.name }}</td>
+    <td>{{ product.price }}</td>
+    <td>{{ product.description }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<a href="{% url 'main:create_product' %}">
+  <button>Buat Produk Baru</button>
+</a>
+
+{% endblock content %}
