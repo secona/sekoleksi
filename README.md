@@ -1,8 +1,10 @@
 # sekoleksi
 
-E-Commerce Application made with Django
+E-Commerce Application made with Django.
 
-:rocket: http://muhammad-vito31-sekoleksi.pbp.cs.ui.ac.id
+- :rocket: [Deployment](http://muhammad-vito31-sekoleksi.pbp.cs.ui.ac.id)
+- :blue_book: [Tugas 2](#blue_book-tugas-2)
+- :blue_book: [Tugas 3](#blue_book-tugas-3)
 
 ## :blue_book: Tugas 2
 
@@ -65,10 +67,11 @@ Object-Relational Mapping (ORM) adalah teknik yang memetakan tabel-tabel dalam d
 ## :blue_book: Tugas 3
 
 ### :arrow_right: Jelaskan mengapa kita memerlukan _data delivery_ dalam pengimplementasian sebuah platform?
-TODO
+_Data delivery_ penting untuk diimplementasi pada sebuah platform untuk memungkinkan terjadinya pertukaran informasi antara sistem-sistem yang terlibat. Komunikasi ini terjadi melalui protokol HTTP, di mana data dikirimkan dalam bentuk HTTP _request_ dan diterima sebagai HTTP _response_. Dalam praktiknya, _data delivery_ memungkinkan berbagai macam operasi, seperti pengiriman input dari pengguna ke _server_, pengambilan data, hingga interaksi dengan layanan eksternal.
 
 ### :arrow_right: Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
-TODO
+1. **Sintaks yang lebih sederhana** &mdash; Salah satu alasan JSON lebih populer dibandingkan XML adalah sintaksnya. Sintaks dari JSON lebih mudah dibaca dibandingkan XML. JSON menggunakan pasangan _key-value_ dengan petik dua, kurung kurawal, dan kurung siku, sedangkan XML menggunakan tag pembuka dan penutup yang membuat XML lebih susah untuk di-manage.
+2. **Integrasi dengan JavaScript** &mdash; JSON adalah akronim dari JavaScript Object Notation. JavaScript sendiri adalah bahasa yang digunakan untuk pengembangan web. Dengan demikian, penggunaan JSON dalam konteks pengembangan web lebih disukai karena lebih mudah untuk dipakai dengan JavaScript dengan menggunakan fungsi `JSON.parse()`. Di sisi lain, XML harus menggunakan _parser_ XML tambahan yang akan menambah kompleksitas aplikasi.
 
 ### :arrow_right: Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?
 Method `is_valid()` pada Django digunakan untuk melakukan validasi terhadap data yang dikirim dari klien. Validasi ini perlu dilakukan untuk mengecek apakah data tersebut sudah sesuai dengan batasan dan aturan yang telah ditetapkan di form. Sebagai contoh, sebuah aplikasi menerima _field_ `harga` yang bertipe _integer_. Jika klien mengirimkan harga dalam bentuk _string_, tanpa validasi, akan terjadi berbagai error pada aplikasi yang tidak diinginkan saat aplikasi mencoba untuk memproses data tersebut.
@@ -76,9 +79,19 @@ Method `is_valid()` pada Django digunakan untuk melakukan validasi terhadap data
 Method `is_valid()` bertindak sebagai "penjaga gerbang" yang memastikan data yang diterima valid. Jika validasi berhasil, `is_valid()` akan mengembalikan nilai `True` dan aplikasi melanjutkan proses seperti biasa. Namun, jika validasi gagal, Django akan menyimpan pesan error yang terjadi, dan `is_valid()` akan mengembalikan nilai `False`. Dengan cara ini, error tersebut dapat ditangani dengan menampilkan pesan yang sesuai kepada klien.
 
 ### :arrow_right: Mengapa kita membutuhkan `csrf_token` saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan `csrf_token` pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
-TODO
+Penggunaan token CSRF adalah salah satu tindakan untuk mencegah terjadinya serangan CSRF. Secara sederhana, serangan CSRF adalah serangan di mana sebuah situs berbahaya memanfaatkan sesi login situs lain untuk melakukan aksi di situs tersebut tanpa sepengetahuan pengguna. Token CSRF berfungsi sebagai lapisan verifikasi tambahan yang memastikan bahwa aksi yang diterima oleh _server_ adalah permintaan yang sah dari pengguna, bukan dari situs berbahaya.
+
+Dalam Django, setiap kali form dibuat, _server_ akan membuat token CSRF yang unik dan menanamkannya dalam form. Saat form tersebut dikirim oleh pengguna, token tersebut akan dikembalikan ke _server_. _Server_ kemudian memeriksa apakah token CSRF yang diterima adalah token sah yang sebelumnya pernah dibuat. Jika token cocok, aksi tersebut dianggap sah dan diproses. Jika token tersebut tidak cocok, permintaan akan ditolak untuk meminimalisasi potensi terjadinya serangan.
 
 ### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial).
+
+#### :one: Membuat input form untuk menambahkan objek model pada app sebelumnya.
+TODO
+
+#### :two: Tambahkan 4 fungsi views baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.
+TODO
+
+#### :three: Membuat routing URL untuk masing-masing views yang telah ditambahkan pada poin 2.
 TODO
 
 ### :camera_flash: Postman Screenshots
@@ -89,10 +102,8 @@ TODO
 #### :two: JSON
 ![image](https://github.com/user-attachments/assets/9f4abf90-69df-4fc9-9257-53b9ea458726)
 
-
 #### :three: XML by ID
 ![image](https://github.com/user-attachments/assets/838b5061-2cb7-4998-ba2e-8614ee7cc4f6)
-
 
 #### :four: JSON by ID
 ![image](https://github.com/user-attachments/assets/0d463b05-da98-4e74-ba26-97441e034d42)
