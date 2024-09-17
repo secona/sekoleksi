@@ -80,3 +80,19 @@ TODO
 
 ### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial).
 TODO
+
+### :camera_flash: Postman Screenshots
+
+#### :one: XML
+![image](https://github.com/user-attachments/assets/3cc72ad1-d050-4ac1-b85d-db79bf64c13d)
+
+#### :two: JSON
+![image](https://github.com/user-attachments/assets/9f4abf90-69df-4fc9-9257-53b9ea458726)
+
+
+#### :three: XML by ID
+![image](https://github.com/user-attachments/assets/838b5061-2cb7-4998-ba2e-8614ee7cc4f6)
+
+
+#### :four: JSON by ID
+![image](https://github.com/user-attachments/assets/0d463b05-da98-4e74-ba26-97441e034d42)
