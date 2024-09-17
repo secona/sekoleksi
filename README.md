@@ -71,7 +71,9 @@ TODO
 TODO
 
 ### :arrow_right: Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?
-TODO
+Method `is_valid()` pada Django digunakan untuk melakukan validasi terhadap data yang dikirim dari klien. Validasi ini perlu dilakukan untuk mengecek apakah data tersebut sudah sesuai dengan batasan dan aturan yang telah ditetapkan di form. Sebagai contoh, sebuah aplikasi menerima _field_ `harga` yang bertipe _integer_. Jika klien mengirimkan harga dalam bentuk _string_, tanpa validasi, akan terjadi berbagai error pada aplikasi yang tidak diinginkan saat aplikasi mencoba untuk memproses data tersebut.
+
+Method `is_valid()` bertindak sebagai "penjaga gerbang" yang memastikan data yang diterima valid. Jika validasi berhasil, `is_valid()` akan mengembalikan nilai `True` dan aplikasi melanjutkan proses seperti biasa. Namun, jika validasi gagal, Django akan menyimpan pesan error yang terjadi, dan `is_valid()` akan mengembalikan nilai `False`. Dengan cara ini, error tersebut dapat ditangani dengan menampilkan pesan yang sesuai kepada klien.
 
 ### :arrow_right: Mengapa kita membutuhkan `csrf_token` saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan `csrf_token` pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
 TODO
