@@ -71,7 +71,7 @@ _Data delivery_ penting untuk diimplementasi pada sebuah platform untuk memungki
 
 ### :arrow_right: Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
 1. **Sintaks yang lebih sederhana** &mdash; Salah satu alasan JSON lebih populer dibandingkan XML adalah sintaksnya. Sintaks dari JSON lebih mudah dibaca dibandingkan XML. JSON menggunakan pasangan _key-value_ dengan petik dua, kurung kurawal, dan kurung siku, sedangkan XML menggunakan tag pembuka dan penutup yang membuat XML lebih susah untuk di-manage.
-2. **Integrasi dengan JavaScript** &mdash; JSON adalah akronim dari JavaScript Object Notation. JavaScript sendiri adalah bahasa yang digunakan untuk pengembangan web. Dengan demikian, penggunaan JSON dalam konteks pengembangan web lebih disukai karena lebih mudah untuk dipakai dengan JavaScript dengan menggunakan fungsi `JSON.parse()`. Di sisi lain, XML harus menggunakan _parser_ XML tambahan yang akan menambah kompleksitas aplikasi.
+2. **Integrasi dengan JavaScript** &mdash; JSON adalah akronim dari JavaScript Object Notation. JavaScript sendiri adalah bahasa yang digunakan untuk pengembangan web. Dengan demikian, penggunaan JSON dalam konteks pengembangan web lebih disukai karena lebih mudah untuk dipakai dengan JavaScript dengan menggunakan fungsi `JSON.parse`. Di sisi lain, XML harus menggunakan _parser_ XML tambahan yang akan menambah kompleksitas aplikasi.
 
 ### :arrow_right: Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?
 Method `is_valid()` pada Django digunakan untuk melakukan validasi terhadap data yang dikirim dari klien. Validasi ini perlu dilakukan untuk mengecek apakah data tersebut sudah sesuai dengan batasan dan aturan yang telah ditetapkan di form. Sebagai contoh, sebuah aplikasi menerima _field_ `harga` yang bertipe _integer_. Jika klien mengirimkan harga dalam bentuk _string_, tanpa validasi, akan terjadi berbagai error pada aplikasi yang tidak diinginkan saat aplikasi mencoba untuk memproses data tersebut.
@@ -86,13 +86,112 @@ Dalam Django, setiap kali form dibuat, _server_ akan membuat token CSRF yang uni
 ### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial).
 
 #### :one: Membuat input form untuk menambahkan objek model pada app sebelumnya.
-TODO
+Forms dalam Django didefinisikan dalam sebuah berkas bernama `forms.py`, yang biasanya diletakkan dalam folder aplikasi. Untuk membuat form, saya menambahkan berkas `forms.py` ke dalam folder `main` dan mendefinisikan kelas `ProductForm`. Kelas ini digunakan sebagai wadah untuk pembuatan objek `Product` baru.
+
+```python3
+# main/forms.py
+
+from django.forms import ModelForm
+from .models import Product
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'description']
+```
+
+Selanjutnya, untuk menampilkan form pembuatan produk baru, saya menambahkan berkas template baru bernama `create_product.html` yang diletakkan di folder `main/templates`. Template ini berisi form yang akan digunakan oleh pengguna untuk membuat produk baru.
+
+```django
+{% comment %} create_product.html {% endcomment %}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Add New Product</h1>
+
+<form method="POST">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Add Product" />
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock content %}
+```
+
+Di dalam berkas `main/views.py`, saya membuat fungsi baru bernama `create_product`. Fungsi ini bertugas untuk memproses permintaan dari pengguna untuk membuat produk baru dengan menggunakan kelas `ProductForm` di `main/forms.py`. Fungsi ini akan menangani permintaan GET untuk menampilkan form pembuatan produk dan POST untuk memproses data.
+
+```python3
+# main/views.py
+
+def create_product(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    return render(request, 'create_product.html', { 'form': form })
+```
+
+Terakhir, dalam berkas `main/urls.py`, saya menghubungkan rute _path_ `/create-product` ke fungsi `create_product`.
+
+```python3
+# main/urls.py
+
+urlpatterns = [
+    # ...
+    path('create-product', create_product, name='create_product'),
+    # ...
+]
+```
+
+Dengan demikian, ketika pengguna mengunjungi halaman `/create-product`, mereka dapat mengisi form untuk menambahkan produk baru, dan setelah data divalidasi, produk tersebut akan disimpan dalam basis data.
 
 #### :two: Tambahkan 4 fungsi views baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.
-TODO
+Dalam berkas `main/views.py`, saya definisikan 4 fungsi baru, yaitu `show_xml`, `show_xml_by_id`, `show_json`, dan `show_json_by_id`. Masing-masing fungsi ini berfungsi sesuai dengan namanya, `show_xml` dan `show_json` akan menampilkan seluruh produk dalam XML dan JSON, `show_xml_by_id` dan `show_json_by_id` akan menampilkan produk berdasarkan ID dalam XML dan JSON.
+
+```python3
+# main/views.py
+
+def show_xml(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize('xml', data), content_type='application/xml')
+
+def show_xml_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize('xml', data), content_type='application/xml')
+
+def show_json(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize('json', data), content_type='application/json')
+
+def show_json_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize('json', data), content_type='application/json')
+```
 
 #### :three: Membuat routing URL untuk masing-masing views yang telah ditambahkan pada poin 2.
-TODO
+Dalam berkas `main/urls.py`, saya memperbarui variabel `urlpatterns` dengan menambahkan rute untuk keempat fungsi yang baru didefinisi. Rute-rute ini memastikan bahwa permintaan ke URL akan ditangani oleh fungsi yang sesuai.
+
+```python3
+# main/urls.py
+
+urlpatterns = [
+    # ...
+    path('xml/', show_xml, name='show_xml'),
+    path('xml/<str:id>/', show_xml_by_id, name='show_xml'),
+    path('json/', show_json, name='show_json'),
+    path('json/<str:id>', show_json_by_id, name='show_json'),
+    # ...
+]
+```
 
 ### :camera_flash: Postman Screenshots
 
