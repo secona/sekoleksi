@@ -2,9 +2,10 @@
 
 E-Commerce Application made with Django.
 
-- :rocket: [Deployment](http://muhammad-vito31-sekoleksi.pbp.cs.ui.ac.id)
-- :blue_book: [Tugas 2](#blue_book-tugas-2)
-- :blue_book: [Tugas 3](#blue_book-tugas-3)
+:rocket: [Deployment](http://muhammad-vito31-sekoleksi.pbp.cs.ui.ac.id)
+
+<details>
+<summary>:blue_book: Tugas 2</summary>
 
 ## :blue_book: Tugas 2
 
@@ -63,7 +64,11 @@ Ketiga, Django memiliki komunitas aktif yang cukup besar. Komunitas tersebut mem
 
 ### ➡️ Mengapa model pada Django disebut sebagai ORM?
 Object-Relational Mapping (ORM) adalah teknik yang memetakan tabel-tabel dalam database ke objek-objek dalam suatu program, di mana objek ini adalah instance dari suatu class dalam bahasa pemrograman. Dalam konteks Django, model adalah class Python yang dipetakan ke tabel dalam database yang digunakan. Melalui model-model ini, pengembang dapat berinteraksi dengan database hanya dengan memanggil method-method yang tersedia pada class model. Django akan secara otomatis mentranslasikan metode-metode tersebut menjadi query SQL yang akan dijalankan di database. Sebagai contoh, ketika pengembang ingin menyimpan sebuah objek, Django akan mengonversi objek Python menjadi kolom dalam database. Sebaliknya, ketika pengembang ingin mendapatkan data, Django akan mengonversi kolom dalam database menjadi objek Python. Pendekatan ini menyederhanakan pengelolaan data, mengabstraksikan kompleksitas query SQL, dan mempercepat pengembangan aplikasi.
+</details>
 
+<details>
+<summary>:blue_book: Tugas 3</summary>
+    
 ## :blue_book: Tugas 3
 
 ### :arrow_right: Jelaskan mengapa kita memerlukan _data delivery_ dalam pengimplementasian sebuah platform?
@@ -207,3 +212,37 @@ urlpatterns = [
 
 #### :four: JSON by ID
 ![image](https://github.com/user-attachments/assets/0d463b05-da98-4e74-ba26-97441e034d42)
+</details>
+
+<details>
+<summary>:blue_book: Tugas 4</summary>
+
+## :blue_book: Tugas 4
+
+### :arrow_right: Apa perbedaan antara HttpResponseRedirect() dan redirect()
+TODO
+
+### :arrow_right: Jelaskan cara kerja penghubungan model MoodEntry dengan User!
+TODO
+
+### :arrow_right: Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+TODO
+
+### :arrow_right: Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+TODO
+
+### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+#### :one: Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+TODO
+
+#### :two: Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+TODO
+
+#### :three: Menghubungkan model Product dengan User.
+TODO
+
+#### :four: Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
+TODO
+
+</details>
