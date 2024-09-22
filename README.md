@@ -219,17 +219,35 @@ urlpatterns = [
 
 ## :blue_book: Tugas 4
 
-### :arrow_right: Apa perbedaan antara HttpResponseRedirect() dan redirect()
-TODO
+### :arrow_right: Apa perbedaan antara `HttpResponseRedirect()` dan `redirect()`
+Redirect dalam HTTP diatur menggunakan _status codes_ dalam rentang `3xx`. Salah satu cara untuk menangani _redirect_ di Django adalah dengan menggunakan `HttpResponseRedirect`, yang merupakan sebuah subclass dari `HttpResponse`. Kelas ini secara otomatis menetapkan _status code_ 302, yaitu _status code_ standar untuk HTTP _redirect_.
 
-### :arrow_right: Jelaskan cara kerja penghubungan model MoodEntry dengan User!
-TODO
+Fungsi `redirect` adalah fungsi pembantu yang secara internal akan menghasilkan _response_ HTTP dengan _status code_ 302, sama seperti `HttpResponseRedirect`. Fungsi ini dapat menerima argumen berupa `model`, `view`, atau `url` dan secara otomatis menentukan _path_ yang dituju berdasarkan konteks projek Django.
+
+Secara umum, fungsi `redirect` lebih fleksibel daripada class `HttpResponseRedirect`. `HttpResponseRedirect` hanya digunakan untuk membuat _response_ HTTP dengan _status code_ yang berada di jangkauan `3xx`. Fungsi `redirect` tidak hanya menyediakan _response_ 302, tetapi juga berintegrasi dengan projek Django, sehingga lebih mudah untuk digunakan.
+
+### :arrow_right: Jelaskan cara kerja penghubungan model `Product` dengan `User`!
+Penghubungan model `Product` dengan `User` dilakukan dengan relasi menggunakan `models.ForeignKey`. 
+
+```python
+class Product(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    price = models.IntegerField()
+    description = models.TextField()
+```
+
+Pada kode tersebut, `Product` terhubung dengan `User` melalui field `user`. Field tersebut mendeklarasikan bahwa banyak `Product` dapat dimiliki oleh seorang `User`, menciptakan relasi _one-to-many_. Penggunaan `on_delete=models.CASCADE` berarti jika sebuah `User` dihapus, semua `Product` yang terhubung dengan `User` tersebut ikut dihapus.
 
 ### :arrow_right: Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
-TODO
+Autentikasi adalah proses verifikasi identitas pengguna. Proses autentikasi memastikan bahwa pengguna benar-benar merupakan pengguna yang dia klaim. Otorisasi adalah proses yang menentukan apakah seorang pengguna memiliki hak akses terhadap suatu _resource_. Secara umum, autentikasi menentukan siapa pengguna tersebut dan otorisasi menentukan hak akses yang dimiliki oleh seorang pengguna.
+
+Saat pengguna login, autentikasi akan memverifikasi identitas mereka melalui username dan passowrd. Setelah berhasil diautentikasi, pengguna dapat diotorisasi untuk mengakses fitur-fitur tertentu sesuai dengan hak akses mereka.
 
 ### :arrow_right: Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
-TODO
+Django mengingat pengguna yang sudah login dengan menggunakan _session_ dan _cookies_. Saat pengguna berhasil login, Django menyimpan informasi sesi mereka dalam basis data, yang berisi informasi penting seperti identitas pengguna. Kemudian, Django mengirimkan sebuah session ID ke klien dalam bentuk _cookie_. Setiap kali pengguna mengunjungi halaman dalam aplikasi, _cookie_ ini akan dikirimkan kembali ke _server_. Lalu, Django akan membaca _cookie_ tersebut untuk mengambil session ID dan membandingkannya dengan informasi sesi yang tersimpan dalam basis data. Jika terdapat sesi yang cocok dengan session ID, Django dapat membaca informasi pengguna terkait dan melanjutkan interaksi tanpa perlu pengguna untuk login ulang.
 
 ### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
