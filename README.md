@@ -252,15 +252,113 @@ Django mengingat pengguna yang sudah login dengan menggunakan _session_ dan _coo
 ### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
 #### :one: Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
-TODO
+1. Membuat tiga fungsi di `main/views.py`, yaitu `register_user`, `login_user`, dan `logout_user`.
+   ```python
+   # ...
+   
+   def register_user(request):
+       if request.method == "POST":
+           form = UserCreationForm(request.POST)
+    
+           if form.is_valid():
+               form.save()
+               messages.success(request, 'Your account has been successfully created!')
+               return redirect('main:login')
+    
+       form = UserCreationForm()
+       return render(request, 'register.html', { 'form': form })
+    
+   def login_user(request: HttpRequest):
+       if request.method == "POST":
+           form = AuthenticationForm(data=request.POST)
+    
+           if form.is_valid():
+               user = form.get_user()
+               login(request, user)
+    
+               response = HttpResponseRedirect(reverse('main:show_main'))
+               response.set_cookie('last_login', str(datetime.now()))
+               return response
+    
+       form = AuthenticationForm(request)
+       return render(request, 'login.html', { 'form': form })
+    
+   def logout_user(request: HttpRequest):
+       logout(request)
+       return redirect('main:login')
+
+   # ...
+   ```
+2. Masing-masing fungsi tersebut dipetakan ke `register/`, `login/`, dan `logout/` dalam `main/urls.py`.
+   ```python
+   urlpatterns = [
+       # ...
+       path('register/', register_user, name='register'),
+       path('login/', login_user, name='login'),
+       path('logout/', logout_user, name='logout'),
+       # ...
+   ]
+   ```
+3. Perlu juga menambahkan _decorator_ `@login_required(login_url='/login')` untuk _views_ yang pengguna perlu login, seperti `/`, dan `/create-product`. Jika pengguna yang belum terautentikasi mencoba untuk mengunjungi halaman tersebut, mereka akan diarahkan ke halaman login terlebih dahulu.
+4. Ketika seorang pengguna pertama kali mengunjungi aplikasi, pengguna tersebut akan diarahkan ke formulir login. Setelah berhasil login, pengguna dapat menggunakan aplikasi dengan penuh, seperti mengunjungi _dashboard_ dan menambahkan `Product`.
 
 #### :two: Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
 TODO
 
 #### :three: Menghubungkan model Product dengan User.
-TODO
+Penghubungan dilakukan dengan menambahkan _field_ pada model `Product`, yaitu field `user` dengan value berupa `models.ForeignKey`. Penambahan ini akan menghubungkan `User` dengan `Product` menggunakan relasi _one-to-many_, yang berarti seorang `User` dapat memiliki banyak `Product`. Perubahan pada model `Product` secara lengkap adalah sebagai berikut.
+
+```python
+class Product(models.Model):
+    # tambahkan field ini
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    price = models.IntegerField()
+    description = models.TextField()
+```
+
+##### Penjelasan `models.ForeignKey`
+- `User` menandakan bahwa foreign key yang dibuat menunjuk ke sebuah baris dalam tabel `User`.
+- `on_delete=models.CASCADE` menandakan bahwa ketika seorang `User` dihapus, `Product` yang terhubung dengan `User` tersebut juga dihapus.
 
 #### :four: Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
-TODO
+1. Pada view `login_user`, dibuat supaya ketika seorang pengguna mencoba untuk log in dan berhasil, sebuah cookie dengan nama `last_login` akan dibuat dengan isi waktu saat pengguna login.
+   ```python
+   def login_user(request: HttpRequest):
+       if request.method == "POST":
+           form = AuthenticationForm(data=request.POST)
+    
+           if form.is_valid():
+               user = form.get_user()
+               login(request, user)
+    
+               response = HttpResponseRedirect(reverse('main:show_main'))
+               response.set_cookie('last_login', str(datetime.now()))
+               return response
+    
+       form = AuthenticationForm(request)
+       return render(request, 'login.html', { 'form': form })
+   ```
+2. Data `username` dapat diambil dari object `request.user` yang berisi data pengguna yang sedang log in. Cookies tersedia pada dictionary `request.COOKIES`. Pengimplementasian cookie _last login_ dimulai dari fungsi _view_ `login_user`. Kedua data tersebut tersedia dalam fungsi view `show_main`.
+   ```python
+   @login_required(login_url='/login')
+   def show_main(request: HttpRequest):
+       products = Product.objects.filter(user=request.user)
+    
+       return render(request, "main.html", {
+           "name": request.user.username,
+           "npm": "2306152411",
+           "class": "F",
+           "products": products,
+           "last_login": request.COOKIES['last_login'],
+       })
+   ```
+3. Data nama dan last login diserahkan ke template `main.html`. Dalam template tersebut, dapat ditampilkan datanya dengan menggunakan kurung kurawal ganda.
+   ```django
+   <p>{{ name }}<p>
+   <h5>Sesi terakhir login: {{ last_login }}</h5>
+   ```
 
 </details>
