@@ -18,12 +18,18 @@
     <th>Nama Produk</th>
     <th>Harga</th>
     <th>Deskripsi</th>
+    <th>Actions</th>
   </tr>
   {% for product in products %}
   <tr>
     <td>{{ product.name }}</td>
     <td>{{ product.price }}</td>
     <td>{{ product.description }}</td>
+    <td>
+      <a href="{% url 'main:show_product' product.id %}">[view]</a> -
+      <a href="{% url 'main:update_product' product.id %}">[edit]</a> -
+      <a href="{% url 'main:delete_product' product.id %}">[delete]</a>
+    </td>
   </tr>
   {% endfor %}
 </table>
