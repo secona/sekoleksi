@@ -303,7 +303,23 @@ Django mengingat pengguna yang sudah login dengan menggunakan _session_ dan _coo
 4. Ketika seorang pengguna pertama kali mengunjungi aplikasi, pengguna tersebut akan diarahkan ke formulir login. Setelah berhasil login, pengguna dapat menggunakan aplikasi dengan penuh, seperti mengunjungi _dashboard_ dan menambahkan `Product`.
 
 #### :two: Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
-TODO
+
+##### Akun dengan Username `A`
+
+![image](https://github.com/user-attachments/assets/7c42400b-b6a8-4552-bb21-d81731b95e31)
+![image](https://github.com/user-attachments/assets/b5bcf6a1-6cd5-4207-8064-8f08c375e5b7)
+![image](https://github.com/user-attachments/assets/c5fa26b7-0f81-4947-9e68-1beed063624e)
+![image](https://github.com/user-attachments/assets/9b959179-3d82-4327-b867-9f5404d90cb3)
+![image](https://github.com/user-attachments/assets/b0b7036e-cb54-40d0-a6da-f70c9601e714)
+
+##### Akun dengan Username `B`
+
+![image](https://github.com/user-attachments/assets/9744df57-0903-417a-9d49-53a6e5ba40cd)
+![image](https://github.com/user-attachments/assets/b5639afb-43b7-4ee5-bf31-08dde8d08de6)
+![image](https://github.com/user-attachments/assets/2e18372d-07d3-4fb9-9944-899ed53b2e4f)
+![image](https://github.com/user-attachments/assets/0df6981e-38f7-421c-8533-4ce3e09ced25)
+![image](https://github.com/user-attachments/assets/5255ef5b-3ae2-49f6-acbb-4e38f4c10088)
+
 
 #### :three: Menghubungkan model Product dengan User.
 Penghubungan dilakukan dengan menambahkan _field_ pada model `Product`, yaitu field `user` dengan value berupa `models.ForeignKey`. Penambahan ini akan menghubungkan `User` dengan `Product` menggunakan relasi _one-to-many_, yang berarti seorang `User` dapat memiliki banyak `Product`. Perubahan pada model `Product` secara lengkap adalah sebagai berikut.
