@@ -244,18 +244,30 @@ Pada kode tersebut, `Product` terhubung dengan `User` melalui field `user`. Fiel
 ### :arrow_right: Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
 Autentikasi adalah proses verifikasi identitas pengguna. Proses autentikasi memastikan bahwa pengguna benar-benar merupakan pengguna yang dia klaim. Otorisasi adalah proses yang menentukan apakah seorang pengguna memiliki hak akses terhadap suatu _resource_. Secara umum, autentikasi menentukan siapa pengguna tersebut dan otorisasi menentukan hak akses yang dimiliki oleh seorang pengguna.
 
-Saat pengguna login, autentikasi akan memverifikasi identitas mereka melalui username dan passowrd. Setelah berhasil diautentikasi, pengguna dapat diotorisasi untuk mengakses fitur-fitur tertentu sesuai dengan hak akses mereka.
+Saat pengguna login, autentikasi akan memverifikasi identitas mereka melalui username dan password. Lalu, username dan password tersebut akan dibandingkan dengan data yang tersimpan dalam basis data. Setelah berhasil diautentikasi, pengguna dapat diotorisasi untuk mengakses fitur-fitur tertentu sesuai dengan hak akses mereka.
+
+Django mengimplementasikan autentikasi melalui modul `django.contrib.auth`. Django menyediakan fungsi-fungsi bawaan untuk memverifikasi identitas pengguna, seperti `login` dan `logout`. Selain itu, Django menyediakan model `User` untuk menyimpan data-data pengguna. Otorisasi dalam Django diterapkan melalui sistem permissions dan groups yang fleksibel, memungkinkan pengembang untuk mengatur hak izin sesuai kebutuhan. Hak akses setiap pengguna dapat diatur secara individu, maupun berdasarkan grup yang mereka ikuti.
 
 ### :arrow_right: Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
 Django mengingat pengguna yang sudah login dengan menggunakan _session_ dan _cookies_. Saat pengguna berhasil login, Django menyimpan informasi sesi mereka dalam basis data, yang berisi informasi penting seperti identitas pengguna. Kemudian, Django mengirimkan sebuah session ID ke klien dalam bentuk _cookie_. Setiap kali pengguna mengunjungi halaman dalam aplikasi, _cookie_ ini akan dikirimkan kembali ke _server_. Lalu, Django akan membaca _cookie_ tersebut untuk mengambil session ID dan membandingkannya dengan informasi sesi yang tersimpan dalam basis data. Jika terdapat sesi yang cocok dengan session ID, Django dapat membaca informasi pengguna terkait dan melanjutkan interaksi tanpa perlu pengguna untuk login ulang.
 
+Cookies juga memiliki fungsi lain selain untuk _session management_. Cookies biasa digunakan untuk menyimpan data pada browser klien, seperti preferensi pengguna dan data sementara. Cookies juga berfungsi untuk pelacakan aktivitas pengguna, memungkinkan situs untuk menyesuaikan konten atau iklan berdasarkan perilaku pengguna.
+
+Cookies memiliki beberapa konfigurasi untuk mengatur bagaimana cookie tersebut bekerja. Jika sebuah cookie tidak diatur dengan tepat, cookie tersebut dapat menjadi celah untuk dieksploitasi penyerang untuk mencuri data dengan menggunakan sesi pengguna. Beberapa konfigurasi cookie yang perlu diperhatikan adalah sebagai berikut.
+
+1. **HttpOnly** &mdash; Cookie dengan atribut `HttpOnly` tidak dapat diakses oleh JavaScript yang membantu mencegah serangan XSS.
+2. **Secure** &mdash; Cookie dengan atribut `Secure` hanya dapat dikirim melalui HTTPS, bukan HTTP. Dengan demikian, data dalam cookie akan terenkripsi dan terjaga saat pengiriman.
+3. **SameSite** &mdash; Atribut `SameSite` mengatur apakah sebuah cookie dapat dikirim dengan sebuah permintaan yang akan dilaksanakan. Atribut ini membantu melindungi dari serangan CSRF.
+4. **Expiration** &mdash; Atribut `Expiration` mengatur kapan sebuah cookie kadaluwarsa. Adanya waktu kadaluwarsa mengurangi risiko terjadinya serangan dengan memperkecil jendela bagi penyerang untuk mengambil cookie dari pengguna.
+
 ### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
 #### :one: Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
-1. Membuat tiga fungsi di `main/views.py`, yaitu `register_user`, `login_user`, dan `logout_user`.
+1. Membuat tiga fungsi di `main/views.py`, yaitu `register_user`, `login_user`, dan `logout_user`. Fungsi `register_user` dan `login_user` memanfaatkan class yang disediakan oleh Django, yaitu `UserCreationForm` dan `AuthenticationForm`. 
    ```python
    # ...
-   
+
+   # digunakan ketika seorang pengguna ingin membuat akun baru
    def register_user(request):
        if request.method == "POST":
            form = UserCreationForm(request.POST)
@@ -267,7 +279,8 @@ Django mengingat pengguna yang sudah login dengan menggunakan _session_ dan _coo
     
        form = UserCreationForm()
        return render(request, 'register.html', { 'form': form })
-    
+
+   # digunakan ketika seorang pengguna ingin login menggunakan akun mereka
    def login_user(request: HttpRequest):
        if request.method == "POST":
            form = AuthenticationForm(data=request.POST)
@@ -282,14 +295,15 @@ Django mengingat pengguna yang sudah login dengan menggunakan _session_ dan _coo
     
        form = AuthenticationForm(request)
        return render(request, 'login.html', { 'form': form })
-    
+
+   # digunakan ketika seorang pengguna ingin logout dari akun mereka
    def logout_user(request: HttpRequest):
        logout(request)
        return redirect('main:login')
 
    # ...
    ```
-2. Masing-masing fungsi tersebut dipetakan ke `register/`, `login/`, dan `logout/` dalam `main/urls.py`.
+2. Masing-masing fungsi tersebut dipetakan ke `register/`, `login/`, dan `logout/` dalam `main/urls.py`, supaya dapat diakses.
    ```python
    urlpatterns = [
        # ...
