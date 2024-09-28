@@ -10,13 +10,30 @@
 
   <form method="POST">
     {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" value="Daftar" /></td>
-      </tr>
-    </table>
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="sr-only">
+          {{ field.label }}
+        </label>
+        <input
+          id="{{ field.id_for_label }}"
+          name="{{ field.html_name }}"
+          type="text"
+          required
+          class="p-2 outline-none border-2 border-gray-200 focus:border-black"
+          placeholder="{{ field.label }}"
+        >
+        {% if field.errors %}
+          {% for error in field.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="text-white bg-black py-2 px-5">
+      Register
+    </button>
   </form>
 
   {% if messages %}

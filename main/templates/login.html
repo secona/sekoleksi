@@ -5,18 +5,44 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
+<main class="min-h-screen flex flex-col gap-5 items-center justify-center">
+  <h1 class="text-4xl">Login</h1>
 
-  <form method="POST">
+  <form method="POST" class="space-y-1">
     {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" value="Login" /></td>
-      </tr>
-    </table>
+    <input type="hidden" name="remember" value="true">
+
+    <div>
+      <label for="username" class="sr-only">
+        Username
+      </label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black"
+        placeholder="Username"
+      >
+    </div>
+
+    <div>
+      <label for="password" class="sr-only">
+        Password
+      </label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black"
+        placeholder="Password"
+      >
+    </div>
+
+    <button type="submit" class="text-white bg-black py-2 px-5">
+      Login
+    </button>
   </form>
 
   {% if messages %}
@@ -29,8 +55,7 @@
 
   <p>
     Don't have an account yet?
-    <a href="{% url 'main:register' %}">Register Now</a>
+    <a href="{% url 'main:register' %}" class="underline text-blue-600">Register Now</a>
   </p>
-</div>
-
+</main>
 {% endblock content %}
