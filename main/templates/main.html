@@ -10,31 +10,6 @@
 <h5>Class: </h5>
 <p>{{ class }}<p>
 
-{% if not products %}
-<p>Belum ada produk</p>
-{% else %}
-<table>
-  <tr>
-    <th>Nama Produk</th>
-    <th>Harga</th>
-    <th>Deskripsi</th>
-    <th>Actions</th>
-  </tr>
-  {% for product in products %}
-  <tr>
-    <td>{{ product.name }}</td>
-    <td>{{ product.price }}</td>
-    <td>{{ product.description }}</td>
-    <td>
-      <a href="{% url 'main:show_product' product.id %}">[view]</a> -
-      <a href="{% url 'main:update_product' product.id %}">[edit]</a> -
-      <a href="{% url 'main:delete_product' product.id %}">[delete]</a>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
-{% endif %}
-
 <a href="{% url 'main:create_product' %}">
   <button>Buat Produk Baru</button>
 </a>
@@ -43,4 +18,30 @@
 <a href="{% url 'main:logout' %}">
   <button>Logout</button>
 </a>
+
+<main class="grid justify-center w-full gap-2 mb-32">
+  {% if not products %}
+  <div class="bg-white rounded-lg border border-gray-200 shadow-md py-6 px-10">
+    <p class="text-slate-600">Belum ada produk yang terdaftar</p>
+  </div>
+  {% else %}
+  {% for product in products %}
+  <div class="min-w-52 flex flex-col bg-white rounded-lg border border-gray-200 shadow-md py-6 px-8 text-wrap">
+    <div class="flex flex-col max-w-md min-w-md">
+      <a href="{% url 'main:show_product' product.id %}">
+        <h1 class="text-xl font-bold hover:underline">{{ product.name }}</h1>
+      </a>
+      <h2 class="text-md mt-1">${{ product.price }}</h2>
+      <p class="text-gray-700 my-4 w-full">{{ product.description }}</p>
+    </div>
+    <div class="flex flex-row justify-end items-center gap-3">
+      <!-- <a class="rounded-md py-1 px-3 text-sm text-white bg-blue-600" href="{% url 'main:update_product' product.id %}">Edit</a> -->
+      <!-- <a class="rounded-md py-1 px-3 text-sm text-white bg-blue-600" href="{% url 'main:delete_product' product.id %}">Delete</a> -->
+      <a class="text-blue-600 hover:underline" href="{% url 'main:update_product' product.id %}">Edit</a>
+      <a class="text-blue-600 hover:underline" href="{% url 'main:delete_product' product.id %}">Delete</a>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</main>
 {% endblock content %}
