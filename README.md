@@ -392,3 +392,71 @@ class Product(models.Model):
    ```
 
 </details>
+
+<details>
+<summary>:blue_book: Tugas 5</summary>
+
+# :blue_book: Tugas 5
+
+### :arrow_right: Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+Prioritas untuk CSS selector adalah sebagai berikut.
+
+1. Inline Styles.
+    ```html
+    <p style="color: red;">Hello World</p>
+    ```
+
+2. ID
+    ```html
+    <p id="text">Hello World</p>
+    ```
+    ```css
+    #text {
+        color: red;
+    }
+    ```
+
+3. Classes, pseudo-classes, attribute selectors
+    ```html
+    <p class="text">Hello World</p>
+    ```
+    ```css
+    .text {
+        color: red;
+    }
+    ```
+
+4. Elements and pseudo-elements
+    ```html
+    <p>Hello World</p>
+    ```
+    ```css
+    p {
+        color: red;
+    }
+    ```
+
+### :arrow_right: Mengapa _responsive design_ menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+_Responsive design_ sangat penting dalam pengembangan aplikasi web karena ukuran layar perangkat yang bervariasi. Dengan _responsive design_, tampilan dapat beradaptasi ke barbagai ukuran layar perangkat, memastikan pengalaman pengguna yang apik untuk semua perangkat yang dipakai. Sebagai contoh, belum tentu _design_ yang dirancang untuk _desktop_ dapat dipakai untuk _mobile_.
+
+### :arrow_right: Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+TODO
+
+### :arrow_right: Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+TODO
+
+### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+#### :one: Kustomisasi halaman _login_, _register_, dan tambah _product_ semenarik mungkin.
+TODO
+
+#### :two: Kustomisasi halaman daftar _product_ menjadi lebih menarik dan _responsive_. Kemudian, perhatikan kondisi berikut: Jika pada aplikasi belum ada _product_ yang tersimpan, halaman daftar _product_ akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar. Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan _card_ (tidak boleh sama persis dengan desain pada Tutorial!).
+TODO
+
+#### :three: Untuk setiap _card product_, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+TODO
+
+#### :four: Buatlah _navigation bar (navbar)_ untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya _mobile_ dan _desktop_.
+TODO
+
+</details>
