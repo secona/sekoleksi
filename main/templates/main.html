@@ -3,14 +3,17 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<p>{{ name }} &mdash; {{ npm }} &mdash; {{ class }}<p>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+<div class="flex justify-center px-5">
+  <div class="inline-block rounded-lg border border-gray-200 my-5 mx-auto text-center max-w-lg py-3 px-5 bg-white">
+    <p>{{ name }} &mdash; {{ npm }} &mdash; {{ class }}<p>
+    <h5><strong>Last Login</strong>: {{ last_login }}</h5>
+  </div>
+</div>
 
-<main class="px-12 lg:px-24 w-full mb-32">
-
-  <div class="w-full border-b border-gray-300 py-2 mb-5">
-    <h1 class="inline-block text-2xl font-bold">Product</h1>
-    <a class="ml-3 text-blue-600 hover:underline" href="{% url 'main:create_product' %}">Add New Product</a>
+<main class="px-5 sm:px-12 lg:px-24 w-full mb-32">
+  <div class="w-full border-b border-gray-300 py-3 mb-5">
+    <h1 class="text-3xl font-bold">Products</h1>
+    <a class="text-blue-600 hover:underline" href="{% url 'main:create_product' %}">Add New Product</a>
   </div>
 
   <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 space-y-3 gap-x-3">

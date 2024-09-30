@@ -43,7 +43,7 @@ def login_user(request: HttpRequest):
             login(request, user)
 
             response = HttpResponseRedirect(reverse('main:show_main'))
-            response.set_cookie('last_login', str(datetime.now()))
+            response.set_cookie('last_login', datetime.now().strftime("%c"))
             return response
 
     form = AuthenticationForm(request)
