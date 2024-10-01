@@ -5,43 +5,66 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="register">
-  <h1>Register</h1>
+<main class="min-h-screen flex flex-col items-center justify-center gap-5">
+  <form method="POST" class="px-10 py-8 flex flex-col justify-center gap-4 bg-white rounded-lg shadow-sm border border-gray-300">
+    <h1 class="text-3xl font-bold w-full mb-3">Register</h1>
 
-  <form method="POST">
     {% csrf_token %}
-    {% for field in form %}
-      <div>
-        <label for="{{ field.id_for_label }}" class="sr-only">
-          {{ field.label }}
-        </label>
-        <input
-          id="{{ field.id_for_label }}"
-          name="{{ field.html_name }}"
-          type="text"
-          required
-          class="p-2 outline-none border-2 border-gray-200 focus:border-black"
-          placeholder="{{ field.label }}"
-        >
-        {% if field.errors %}
-          {% for error in field.errors %}
-            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
-          {% endfor %}
-        {% endif %}
-      </div>
-    {% endfor %}
+    <input type="hidden" name="remember" value="true">
 
-    <button type="submit" class="text-white bg-black py-2 px-5">
+    <div class="w-full">
+      <label for="{{ form.username.id_for_label }}" class="text-sm">
+        Your username
+      </label>
+      <input
+        id="{{ form.username.id_for_label }}"
+        name="{{ form.username.html_name }}"
+        type="text"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+        placeholder="TheBlackSwordsman"
+      >
+    </div>
+
+    <div class="w-full">
+      <label for="{{ form.password1.id_for_label }}" class="text-sm">
+        Your password
+      </label>
+      <input
+        id="{{ form.password1.id_for_label }}"
+        name="{{ form.password1.html_name }}"
+        type="password"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+        placeholder="••••••••"
+      >
+    </div>
+
+    <div class="w-full">
+      <label for="{{ form.password2.id_for_label }}" class="text-sm">
+        Password Confirmation
+      </label>
+      <input
+        id="{{ form.password2.id_for_label }}"
+        name="{{ form.password2.html_name }}"
+        type="password"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+        placeholder="••••••••"
+      >
+    </div>
+
+    <button type="submit" class="text-white bg-cyan-600 rounded-lg py-2 px-5 mt-5 w-full">
       Register
     </button>
-  </form>
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-</div>
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </form>
+</main>
 {% endblock content %}
