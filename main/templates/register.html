@@ -6,8 +6,8 @@
 
 {% block content %}
 <main class="min-h-screen flex flex-col items-center justify-center gap-5">
-  <form method="POST" class="px-10 py-8 flex flex-col justify-center gap-4 bg-white rounded-lg shadow-sm border border-gray-300">
-    <h1 class="text-3xl font-bold w-full mb-3">Register</h1>
+  <form method="POST" class="px-10 py-8 flex flex-col justify-center gap-4 bg-white rounded-lg shadow-sm border border-gray-300 max-w-xl">
+    <h1 class="text-3xl font-bold w-full mb-3">Welcome to Sekoleksi</h1>
 
     {% csrf_token %}
 
@@ -21,13 +21,7 @@
       Register
     </button>
 
-    {% if messages %}
-    <ul>
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
+    {% include "components/messages_list.html" with messages=messages %}
   </form>
 </main>
 {% endblock content %}

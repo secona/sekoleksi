@@ -20,13 +20,7 @@
       Login
     </button>
 
-    {% if messages %}
-    <ul>
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
+    {% include "components/messages_list.html" with messages=messages %}
   </form>
 
   <a href="{% url 'main:register' %}" class="underline text-blue-600">
