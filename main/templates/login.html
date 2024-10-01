@@ -10,35 +10,11 @@
     <h1 class="text-3xl font-bold w-full mb-3">Login</h1>
 
     {% csrf_token %}
+
     <input type="hidden" name="remember" value="true">
 
-    <div class="w-full">
-      <label for="username" class="text-sm">
-        Your username
-      </label>
-      <input
-        id="username"
-        name="username"
-        type="text"
-        required
-        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
-        placeholder="TheBlackSwordsman"
-      >
-    </div>
-
-    <div class="w-full">
-      <label for="password" class="text-sm">
-        Your password
-      </label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        required
-        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
-        placeholder="••••••••"
-      >
-    </div>
+    {% include "components/text_input.html" with field=form.username placeholder="TheBlackSwordsman" %}
+    {% include "components/text_input.html" with field=form.password type="password" placeholder="••••••••" %}
 
     <button type="submit" class="text-white bg-cyan-600 rounded-lg py-2 px-5 mt-5 w-full">
       Login
