@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 {% include 'navbar.html' %}
 
@@ -16,12 +18,13 @@
     <a class="text-blue-600 hover:underline" href="{% url 'main:create_product' %}">Add New Product</a>
   </div>
 
+  {% if not products %}
+  <div class="text-center bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-10 break-inside-avoid">
+    <img src="{% static 'image/empty-list.png' %}" width="300" class="block mx-auto">
+    <p class="text-slate-600">Belum ada produk yang terdaftar</p>
+  </div>
+  {% else %}
   <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 space-y-3 gap-x-3">
-    {% if not products %}
-    <div class="bg-white rounded-lg border border-gray-200 shadow-md py-6 px-10">
-      <p class="text-slate-600">Belum ada produk yang terdaftar</p>
-    </div>
-    {% else %}
     {% for product in products %}
     <div class="flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-8 text-wrap break-inside-avoid">
       <div class="flex flex-col max-w-md min-w-md">
@@ -37,7 +40,7 @@
       </div>
     </div>
     {% endfor %}
-    {% endif %}
   </div>
+  {% endif %}
 </main>
 {% endblock content %}
