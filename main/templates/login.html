@@ -5,32 +5,26 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
+<main class="min-h-screen flex flex-col items-center justify-center gap-5">
+  <form method="POST" class="px-10 py-8 flex flex-col justify-center gap-4 bg-white rounded-lg shadow-sm border border-gray-300">
+    <h1 class="text-3xl font-bold w-full mb-3">Login</h1>
 
-  <form method="POST">
     {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" value="Login" /></td>
-      </tr>
-    </table>
+
+    <input type="hidden" name="remember" value="true">
+
+    {% include "components/text_input.html" with field=form.username placeholder="TheBlackSwordsman" %}
+    {% include "components/text_input.html" with field=form.password type="password" placeholder="••••••••" %}
+
+    <button type="submit" class="text-white bg-cyan-600 rounded-lg py-2 px-5 mt-5 w-full">
+      Login
+    </button>
+
+    {% include "components/messages_list.html" with messages=messages %}
   </form>
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-
-  <p>
-    Don't have an account yet?
-    <a href="{% url 'main:register' %}">Register Now</a>
-  </p>
-</div>
-
+  <a href="{% url 'main:register' %}" class="underline text-blue-600">
+    I don't have an account yet
+  </a>
+</main>
 {% endblock content %}

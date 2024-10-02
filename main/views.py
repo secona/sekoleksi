@@ -30,6 +30,8 @@ def register_user(request):
             form.save()
             messages.success(request, 'Your account has been successfully created!')
             return redirect('main:login')
+        else:
+            return render(request, 'register.html', { 'form': form })
 
     form = UserCreationForm()
     return render(request, 'register.html', { 'form': form })
@@ -43,7 +45,7 @@ def login_user(request: HttpRequest):
             login(request, user)
 
             response = HttpResponseRedirect(reverse('main:show_main'))
-            response.set_cookie('last_login', str(datetime.now()))
+            response.set_cookie('last_login', datetime.now().strftime("%c"))
             return response
 
     form = AuthenticationForm(request)

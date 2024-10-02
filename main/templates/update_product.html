@@ -1,18 +1,80 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>Update Product</h1>
+{% block meta %}
+<title>Edit Product</title>
+{% endblock meta %}
 
-<form method="POST">
-  {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-    <tr>
-      <td></td>
-      <td>
-        <input type="submit" value="Update" />
-      </td>
-    </tr>
-  </table>
-</form>
+{% block content %}
+<main class="min-h-screen flex flex-col items-center justify-center gap-5">
+  <form method="POST" class="px-10 py-8 mx-2 flex flex-col justify-center gap-4 bg-white rounded-lg shadow-lg border border-gray-300">
+    <div>
+      <a href="{% url 'main:show_main' %}" class="inline-block mr-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+          <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+        </svg>
+      </a>
+      <h1 class="inline-block text-3xl font-bold mb-3">
+        <span>Update Product</span>
+      </h1>
+    </div>
+
+    {% csrf_token %}
+    <input type="hidden" name="remember" value="true">
+
+    <div class="w-full">
+      <label for="{{ form.name.id_for_label }}" class="text-sm">
+        Name
+      </label>
+      <input
+        id="{{ form.name.id_for_label }}"
+        name="{{ form.name.html_name }}"
+        value="{{ form.name.value }}"
+        type="text"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+      />
+    </div>
+
+    <div class="w-full">
+      <label for="{{ form.price.id_for_label }}" class="text-sm">
+        Price
+      </label>
+      <input
+        id="{{ form.price.id_for_label }}"
+        name="{{ form.price.html_name }}"
+        value="{{ form.price.value }}"
+        type="text"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+      />
+    </div>
+
+    <div class="w-full">
+      <label for="{{ form.description.id_for_label }}" class="text-sm">
+        Description
+      </label>
+      <textarea
+        id="{{ form.description.id_for_label }}"
+        name="{{ form.description.html_name }}"
+        rows="10"
+        cols="40"
+        type="text"
+        required
+        class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+      >{{ form.description.value }}</textarea>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2 mt-3">
+      <a href="{% url 'main:show_main' %}" class="text-center text-white bg-red-600 rounded-lg py-2 px-5 w-full">
+        Cancel
+      </a>
+
+      <button type="submit" class="text-white bg-cyan-600 rounded-lg py-2 px-5 w-full">
+        Edit
+      </button>
+    </div>
+
+    {% include "components/messages_list.html" with messages=messages %}
+  </form>
+</main>
 {% endblock content %}

@@ -392,3 +392,326 @@ class Product(models.Model):
    ```
 
 </details>
+
+<details>
+<summary>:blue_book: Tugas 5</summary>
+
+# :blue_book: Tugas 5
+
+### :arrow_right: Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+Jika sebuah elemen HTML memiliki beberapa CSS selector, prioritasnya ditentukan berdasarkan spesifisitas, _important rules_, dan urutan pendefinisian.
+
+1. `!important` _rules_ 
+    ```html
+    <p id="text" class="text" style="color: blue;">Hello World</p>
+    ```
+    ```css
+    p {
+        color: red !important;
+    }
+    ```
+    Jika terdapat CSS _rule_ dengan tag `!important`, _rule_ tersebut akan memiliki prioritas tertinggi dan menimpa _rule_ lain dengan selector lain. Teks "Hello World" di atas akan berwarna merah karena CSS _rule_ yang mendefinisikan memiliki atribut `!important` sehingga prioritasnya paling tinggi.
+
+3. Inline Styles
+    ```html
+    <p id="text" class="text" style="color: blue;">Hello World</p>
+    ```
+    ```css
+    #text {
+        color: red;
+    }
+    ```
+    CSS _rule_ yang didefinisikan secara inline di HTML tag akan memiliki prioritas yang tinggi. Teks "Hello World" di atas akan berwarna biru karena _inline style_ memiliki prioritas yang lebih tinggi daripada _selector_ ID.
+
+4. ID
+    ```html
+    <p id="text" class="text">Hello World</p>
+    ```
+    ```css
+    #text {
+        color: red;
+    }
+
+    .text {
+        color: green;
+    }
+    ```
+    Teks "Hello World" di atas akan berwarna merah karena _selector_ ID memiliki prioritas yang lebih tinggi daripada _selector class_.
+
+5. Classes, pseudo-classes, attribute selectors
+    ```html
+    <p class="text">Hello World</p>
+    ```
+    ```css
+    .text {
+        color: red;
+    }
+
+    p {
+        color: blue;
+    }
+    ```
+    Teks "Hello World" di atas akan berwarna merah karena _selector class_ memiliki prioritas yang lebih tinggi daripada _selector_ elemen.
+
+6. Elements and pseudo-elements
+    ```html
+    <p>Hello World</p>
+    ```
+    ```css
+    p {
+        color: red;
+    }
+    ```
+    Teks "Hello World" di atas akan berwarna merah karena didefinisikan menggunakan _selector_ elemen.
+
+7. Urutan dalam CSS Stylesheet
+   ```html
+   <p>Hello World</p>
+   ```
+   ```css
+   p {
+       color: red;
+   }
+
+   p {
+       color: blue;
+   }
+   ```
+   Jika terdapat dua CSS _rule_ yang mendefinisikan dengan prioritas yang sama, CSS _rule_ yang didefinisikan terakhir pada _stylesheet_ akan diterapkan. Teks "Hello World" di atas akan berwarna biru karena _rule_ CSS yang mendefinisikan warna biru lebih akhir daripada _rule_ CSS yang mendefinisikan warna merah.
+
+- https://www.w3schools.com/css/css_specificity.asp
+- https://www.w3schools.com/css/css_important.asp
+
+### :arrow_right: Mengapa _responsive design_ menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+_Responsive design_ adalah pendekatan desain web di mana sebuah tampilan dapat beradaptasi dengan berbagai ukuran layar yang ada, seperti untuk desktop, tablet, dan perangkat mobile. Salah satu aspek penting dari penerapan _responsive design_ adalah pengalaman pengguna. Sebuah tampilan web yang responsif akan memiliki pengalaman pengguna yang lebih baik dibandingkan tampilan web yang tidak responsif. Tampilan web yang hanya dirancang untuk ukuran layar besar, seperti desktop, akan sulit untuk dipakai jika web tersebut diakses menggunakan gawai dengan ukuran layar kecil, seperti mobile. Hal ini dapat menyebabkan elemen-elemen pada halaman tampak kecil, tidak proporsional, sulit dijangkau, dan mengurangi kenyamanan pengguna. Sebaliknya, jika web tersebut sudah menerapkan _responsive design_, pengguna yang menggunakan melalui mobile tidak akan menemui masalah apa pun karena tampilannya sudah didesain sedemikian hingga supaya beradaptasi ke ukuran layar yang bervariasi.
+
+Secara umum, sebagian besar web modern sudah mengimplementasikan _responsive design_, terutama pada situs-situs populer seperti Twitter, YouTube, dan Google. Hal ini dapat dilihat dengan mengunjungi web-web tersebut menggunakan mobile, di mana setiap elemen tampil secara proporsional dan tidak ada yang rusak. Namun, masih ada beberapa web yang digunakan sekarang yang belum mengimplementasikan _responsive design_. Salah satu contohnya adalah SiakNG. Ketika diakses melalui perangkat mobile, tampilan SiakNG menunjukkan elemen-elemen yang terlalu kecil, sehingga pengguna perlu memperbesar layar untuk berinteraksi dengan nyaman.
+
+- https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design
+
+### :arrow_right: Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
+#### Margin
+Margin adalah jarak luar antara elemen dengan elemen lain di sekitarnya. Margin tidak memiliki warna dan mengosongkan daerah di luar border.
+```css
+div {
+    margin: 10px;
+}
+```
+CSS di atas mendefinisikan margin sebesar `10px` untuk semua sisi pada elemen `div`.
+
+#### Border
+Border adalah garis yang mengelilingi elemen yang berada diantara padding dan margin. Border dapat diberi warna, lebar, dan _style_ (solid, double, dash, dan seterusnya). Setiap sisi border dapat diatur secara independen.
+```css
+div {
+    border: 1px solid black;
+}
+```
+CSS di atas mendefinisikan border untuk elemen `div` dengan style solid, selebar 1 pixel, dan berwarna hitam.
+
+#### Padding
+Padding adalah jarak antara isi elemen dengan border. Padding menciptakan area dalam elemen di antara border dengan isi elemen.
+```css
+div {
+    padding: 10px;
+}
+```
+CSS di atas mendefinisikan padding sebesar `10px` untuk semua sisi pada elemen `div`.
+
+
+- https://www.w3schools.com/css/css_boxmodel.asp
+
+### :arrow_right: Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
+#### Flexbox
+Flexbox dalam CSS adalah sistem layout 1 dimensi dalam CSS yang digunakan untuk menyusun elemen dalam sebuah container, baik secara horizontal maupun vertikal. Arab dari flexbox dapat diatur menggunakan properti `flex-direction` yang dapat berupa `row`, `row-reverse`, `column`, atau `column-reverse`. `row` untuk horizontal dan `column` untuk vertikal. Flexbox memungkinkan elemen-elemen dalam container untuk menyesuaikan diri dengan ruang yang tersisa.
+
+Dengan flexbox, posisi elemen dalam container dapat dengan mudah diatur di sepanjang sumbu utama (_main axis_) dan sumbu sekunder (_cross axis_) dengan properti berikut.
+1. `justify-content`: Mengatur distribusi elemen pada sumbu utama.
+2. `align-items`: Mengatur distribusi elemen pada sumbu sekunder.
+
+Flexbox juga memungkinkan untuk mendistribusikan ruang yang tersedia secara proporsional antara elemen dalam container dengan menggunakan properti berikut.
+1. `flex-grow`: Mengatur perilaku elemen terhadap ruang yang tersisa, apakah elemen tersebut akan berkembang mengisi ruang yang tersisa, atau tetap pada ukurannya.
+2. `flex-shrink`: Mengatur perilaku elemen terhadap ruang yang terbatas, apakah elemen tersebut akan menyusut memberikan tempat ke elemen lain, atau tetap pada ukurannya. 
+3. `flex-basis`: Mengatur ukuran inisial elemen sebelum elemen tersebut tumbuh atau menyusut.
+
+Flexbox ideal untuk mengatur posisi elemen dalam 1 dimensi, seperti:
+1. Navbar dan sidebar dengan mengatur elemen-elemen _button_ dan _link_ dalam posisi horizontal atau vertikal.
+2. List produk yang tersusun dalam satu baris atau satu kolom.
+3. Menengahkan secara vertikal elemen-elemen yang berada dalam satu baris.
+
+#### Grid
+Grid adalah sistem layout 2 dimensi yang menggunakan baris dan kolom untuk menaruh elemennya. 
+
+Grid bekerja dengan menggunakan sistem baris dan kolom. Pengembang dapat mengatur jumlah baris dan kolom dan mendefinisikan besarnya dengan menggunakan properti sebagai berikut.
+1. `grid-template-columns`: Mengatur jumlah kolom dan ukuran masing-masing kolom pada grid.
+2. `grid-template-rows`: Mengatur jumlah baris dan ukuran masing-masing baris pada grid.
+
+Grid ideal untuk mengatur posisi elemen dalam 2 dimensi, seperti:
+1. Menyusun galeri yang rapi dan terstruktur dengan baris dan kolom yang konsisten
+2. Layout halaman utama yang lumayan kompleks dengan header, sidebar, konten utama, dan footer.
+
+#### Perbedaan Utama Flexbox dan Grid
+1. Flexbox mengatur elemen satu per satu sepanjang sumbu utama, sedangkan grid mengatur elemen sepanjang dua sumbu secara bersamaan.
+2. Flexbox lebih cocok untuk mengatur elemen pada satu sumbu saja, horizontal atau vertikal. Grid lebih cocok untuk mengatur elemen pada dua sumbu, horizontal dan vertikal.
+
+- https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Relationship_of_grid_layout_with_other_layout_methods
+- https://www.geeksforgeeks.org/comparison-between-css-grid-css-flexbox/
+
+### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+#### :one: Implementasikan fungsi untuk menghapus dan mengedit product.
+Pertama, membuat fungsi baru di `main/views.py`, yaitu `update_product` dan `delete_product`. Lalu, kedua fungsi ini dipetakan ke _path_ `product/<str:id>/edit` dan `product/<str:id>/delete`. Dengan demikian, ketika seorang pengguna yang sudah terautentikasi mengunjungi _path_ tersebut, mereka dapat menghapus atau mengedit produk berdasarkan ID produk. Definisi kedua fungsi tersebut adalah sebagai berikut.
+
+```python
+@login_required(login_url='/login')
+def update_product(request: HttpRequest, id):
+    obj = get_object_or_404(Product, id=id, user_id=request.user.id)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=obj)
+
+        if form.is_valid():
+            form.save()
+            return redirect('main:show_main')
+
+        return redirect('main:show_main')
+
+    form = ProductForm(instance=obj)
+    return render(request, 'update_product.html', { 'form': form })
+
+@login_required(login_url='/login')
+def delete_product(request: HttpRequest, id):
+    obj = get_object_or_404(Product, id=id, user_id=request.user.id)
+
+    if request.method == 'POST':
+        obj.delete()
+        return redirect('main:show_main')
+
+    return render(request, 'delete_product.html', { 'product': obj })
+```
+
+#### :two: Kustomisasi halaman _login_, _register_, dan tambah _product_ semenarik mungkin.
+Pertama, saya membuat komponen baru `text_input` dalam direktori `main/templates/components`. Komponen ini akan digunakan dalam setiap formulir supaya konsistensi input teks sama. Kedua, saya membuat tampilan untuk _login_ berupa _card_ menggunakan TailwindCSS. Lalu, tampilan _login_ tersebut saya gunakan lagi untuk halaman _register_, tambah _product_, dan edit _product_. Tampilan dari _login_ adalah sebagai berikut.
+
+```html
+<main class="min-h-screen flex flex-col items-center justify-center gap-5">
+  <form method="POST" class="px-10 py-8 flex flex-col justify-center gap-4 bg-white rounded-lg shadow-sm border border-gray-300">
+    <h1 class="text-3xl font-bold w-full mb-3">Title</h1>
+    <!-- Isi Form -->
+  </form>
+</main>
+```
+
+![image](https://github.com/user-attachments/assets/34539053-b955-497e-babf-df40ab8faafb)
+
+#### :three: Kustomisasi halaman daftar _product_ menjadi lebih menarik dan _responsive_. Kemudian, perhatikan kondisi berikut: Jika pada aplikasi belum ada _product_ yang tersimpan, halaman daftar _product_ akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar. Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan _card_ (tidak boleh sama persis dengan desain pada Tutorial!).
+
+##### Membuat Tampilan _Responsive_ dengan TailwindCSS
+Dengan TailwindCSS, tampilan _responsive_ dapat dengan mudah dicapai meggunakan _breakpoints_, seperti `sm:`, `md:`, `lg:`, dan seterusnya. _Breakpoints_ ini memungkinkan kita untuk menentukan aturan-aturan CSS khusus yang hanya diterapkan ketika ukuran layar sudah melewati batas tertentu. Dengan demikian, kita dapat mendefinisikan _style_ tertentu untuk ukuran layar tertentu.
+
+##### Penggunaan _If Statement_ untuk Menampilkan Produk
+Dalam Django, menampilkan daftar produk secara kondisional bisa dilakukan dengan menggunakan tag `if`. Contohnya adalah sebagai berikut. 
+
+```django
+{% if not products %}
+    <!-- HTML dalam block ini akan ditampilkan jika tidak ada produk -->
+{% else %}
+    <!-- HTML dalam block ini akan ditampilkan jika terdapat setidaknya 1 produk -->
+{% endif %}
+```
+
+Dalam penerapannya, saya mengganti komponen HTML dalam _block_ tersebut dengan yang sesuai. Saat tidak ada produk, halaman akan menampilkan gambar yang menunjukkan bahwa belum ada produk terdaftar. Untuk itu, saya perlu menambahkan gambar ke dalam projek Django saya.
+
+##### Menambahkan Gambar
+Langkah pertama adalah mengubah `settings.py` dalam direktori `sekoleksi`.
+
+```python
+STATIC_URL = '/static/'
+if DEBUG:
+    STATICFILES_DIRS = [BASE_DIR / 'static']
+else:
+    STATIC_ROOT = BASE_DIR / 'static'
+```
+
+Dengan adanya konfigurasi ini, file-file yang berada dalam direktori `/static/` dapat diakses dalam Django menggunakan tag `static`. Lalu, saya tambahkan gambar bernama `empty-list.png` ke dalam folder `static/image`. Penggunaan gambar tersebut adalah sebagai berikut.
+
+```django
+{% load static %}
+<img src="{% static 'image/empty-list.png' %}" width="300" class="block mx-auto">
+```
+
+Kode tersebut akan menampilkan gambar bernama `empty-list.png` yang berada dalam direktori `static/image`.
+
+##### Menampilkan Daftar Produk
+Untuk menampilkan daftar produk, dapat digunakan _for loop_ dalam Django untuk mengiterasikan setiap produk yang ada. Implementasinya adalah sebagai berikut.
+
+```django
+{% for product in products %}
+  {% include "components/product_card.html" with product=product %}
+{% endfor %}
+```
+
+Komponen `components/product_card.html` akan dijelaskan di nomor selanjutnya.
+
+#### :four: Untuk setiap _card product_, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+Pertama, saya definisikan komponen HTML baru, yaitu `product_card.html` yang berada dalam direktori `main/templates/components`.
+
+```django
+<div class="flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-8 text-wrap break-inside-avoid">
+  <div class="flex flex-col max-w-md min-w-md">
+    <a href="{% url 'main:show_product' product.id %}">
+      <h1 class="text-xl font-bold hover:underline">{{ product.name }}</h1>
+    </a>
+    <h2 class="text-md mt-1">${{ product.price }}</h2>
+    <p class="text-gray-700 my-4 w-full">{{ product.description }}</p>
+  </div>
+  <div class="flex flex-row justify-end items-center gap-3">
+    <a class="text-blue-600 hover:underline" href="{% url 'main:update_product' product.id %}">Edit</a>
+    <a class="text-blue-600 hover:underline" href="{% url 'main:delete_product' product.id %}">Delete</a>
+  </div>
+</div>
+```
+
+Kedua button untuk mengedit dan menghapus berupa link yang menuju halaman baru berupa form yang di mana _view_-nya telah didefinisikan di _checklist_ nomor 1. Form tersebut didefinisikan dalam `update_product.html` dan `delete_product.html`. Lalu, komponen tersebut digunakan dalam `main.html` dengan menggabungkan dengan _for loop_ produk.
+
+```python
+{% for product in products %}
+  {% include "components/product_card.html" with product=product %}
+{% endfor %}
+```
+
+#### :five: Buatlah _navigation bar (navbar)_ untuk fitur-fitur pada aplikasi yang _responsive_ terhadap perbedaan ukuran device, khususnya _mobile_ dan _desktop_.
+Pertama, saya membuat berkas baru bernama `navbar.html` dalam direktori `templates`. Implementasi tampilan _responsive_ dilakukan dengan menggunakan breakpoint TailwindCSS. Berikut adalah implementasi dropdown mobile pada `navbar.html`.
+
+```django
+<div class="md:hidden">
+  <div class="pt-2 pb-5 space-y-1 mx-auto flex flex-col">
+    <a href="#" class="hover:underline py-2 text-white">Home</a>
+    <a href="#" class="hover:underline py-2 text-white">Products</a>
+    <a href="#" class="hover:underline py-2 text-white">Categories</a>
+    <a href="#" class="hover:underline py-2 text-white">Cart</a>
+    {% if user.is_authenticated %}
+      <p class="text-white">Welcome, {{ user.username }}</p>
+      <a href="{% url 'main:logout' %}" class="block text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+        Logout
+      </a>
+    {% else %}
+      <a href="{% url 'main:login' %}" class="block text-center bg-cyan-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 mb-2">
+        Login
+      </a>
+      <a href="{% url 'main:register' %}" class="block text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+        Register
+      </a>
+    {% endif %}
+  </div>
+</div>
+```
+
+Karena class `md:hidden`, `div` tersebut akan di-_apply_ style `hidden` jika ukuran layar sudah melebihi batas `md`. Dalam kata lain, _dropdown_ hanya ada jika ukuran layar kecil, seperti ukuran layar mobile. _Navigation bar_ ini dapat digunakan dalam template-template lain dengan menggunakan tag `include` pada Django. Implementasinya adalah sebagai berikut.
+
+```django
+{% include 'navbar.html' %}
+```
+
+</details>

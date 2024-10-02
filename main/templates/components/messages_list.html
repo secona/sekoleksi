@@ -1,0 +1,9 @@
+{% if messages %}
+<div class="mt-2 bg-blue-200 border-2 border-blue-300 rounded-lg px-4 py-2">
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

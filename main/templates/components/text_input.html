@@ -1,0 +1,25 @@
+<div class="w-full">
+  <label for="{{ field.id_for_label }}" class="text-sm">
+    {{ label|default:field.label }}
+  </label>
+  <input
+    id="{{ field.id_for_label }}"
+    name="{{ field.html_name }}"
+    type="{{ type|default:"text" }}"
+    required
+    class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+    placeholder="{{ placeholder|default:field.html_name }}"
+  >
+
+  {% if field.help_text %}
+  <div class="mt-2 bg-emerald-200 border-2 border-emerald-300 rounded-lg px-4 py-2">
+    {{ field.help_text }}
+  </div>
+  {% endif %}
+
+  {% if field.errors %}
+  <div class="mt-2 bg-rose-200 border-2 border-rose-300 rounded-lg px-4 py-2">
+    {{ field.errors }}
+  </div>
+  {% endif %}
+</div>
