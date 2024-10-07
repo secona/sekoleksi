@@ -105,15 +105,17 @@
     return fetch("{% url 'main:show_json' %}").then((res) => res.json());
   }
 
-  function addProduct() {
-    fetch("{% url 'main:create_product_ajax' %}", {
+  async function addProduct() {
+    const res = await fetch("{% url 'main:create_product_ajax' %}", {
       method: "POST",
       body: new FormData(document.querySelector('#product-form')),
     })
-    .then(response => refreshProducts())
 
-    document.getElementById("product-form").reset(); 
-    hideModal();
+    if (res.ok) {
+      refreshProducts();
+      document.getElementById("product-form").reset();
+      hideModal();
+    }
   }
 
   document

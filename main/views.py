@@ -76,20 +76,21 @@ def create_product(request: HttpRequest):
 @csrf_exempt
 @require_POST
 def create_product_ajax(request):
-    name = strip_tags(request.POST.get('name'))
-    price = strip_tags(request.POST.get('price'))
-    description = strip_tags(request.POST.get('description'))
-    user = request.user
-
-    new_product = Product(
-        name=name,
-        price=price,
-        description=description,
-        user=user,
+    product_form = ProductForm(
+        data={
+            "name": strip_tags(request.POST.get('name')),
+            "price": strip_tags(request.POST.get('price')),
+            "description": strip_tags(request.POST.get('description')),
+        },
     )
-    new_product.save()
 
-    return HttpResponse(b"CREATED", status=201)
+    if product_form.is_valid():
+        product = product_form.save(commit=False)
+        product.user = request.user
+        product.save()
+        return HttpResponse(b"CREATED", status=201)
+    else:
+        return HttpResponse(b"ERROR", status=400)
 
 @login_required(login_url='/login')
 def show_product(request: HttpRequest, id):
