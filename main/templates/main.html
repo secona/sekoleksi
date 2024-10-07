@@ -18,17 +18,53 @@
     <a class="text-blue-600 hover:underline" href="{% url 'main:create_product' %}">Add New Product</a>
   </div>
 
-  {% if not products %}
-  <div class="text-center bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-10 break-inside-avoid">
-    <img src="{% static 'image/empty-list.png' %}" width="300" class="block mx-auto">
-    <p class="text-slate-600">Belum ada produk yang terdaftar</p>
-  </div>
-  {% else %}
-  <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 space-y-3 gap-x-3">
-    {% for product in products %}
-      {% include "components/product_card.html" with product=product %}
-    {% endfor %}
-  </div>
-  {% endif %}
+  <div id="product-cards-container"></div>
 </main>
+
+<script>
+  async function getProducts() {
+    return fetch("{% url 'main:show_json' %}").then((res) => res.json());
+  }
+
+  async function refreshProducts() {
+    const products = await getProducts();
+    console.log(products)
+
+    let classNames = "";
+    let htmlString = "";
+
+    if (products.length === 0) {
+      classNames = "text-center bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-10 break-inside-avoid";
+      htmlString = `
+        <img src="{% static 'image/empty-list.png' %}" width="300" class="block mx-auto">
+        <p class="text-slate-600">Belum ada produk yang terdaftar</p>
+      `;
+    } else {
+      classNames = "columns-1 md:columns-2 lg:columns-3 xl:columns-4 space-y-3 gap-x-3";
+      products.forEach((product) => {
+        htmlString += `
+          <div class="flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-8 text-wrap break-inside-avoid">
+            <div class="flex flex-col max-w-md min-w-md">
+                <a href="/product/${product.pk}">
+                <h1 class="text-xl font-bold hover:underline">${product.fields.name}</h1>
+              </a>
+              <h2 class="text-md mt-1">$${product.fields.price}</h2>
+              <p class="text-gray-700 my-4 w-full">${product.fields.description}</p>
+            </div>
+            <div class="flex flex-row justify-end items-center gap-3">
+              <a class="text-blue-600 hover:underline" href="/product/${product.pk}/edit">Edit</a>
+              <a class="text-blue-600 hover:underline" href="/product/${product.pk}/delete">Delete</a>
+            </div>
+          </div>
+        `;
+      })
+    }
+
+    document.getElementById("product-cards-container").innerHTML = htmlString;
+    document.getElementById("product-cards-container").className = classNames;
+  }
+
+  refreshProducts();
+</script>
+
 {% endblock content %}
