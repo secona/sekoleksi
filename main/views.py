@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 from datetime import datetime
 from .forms import ProductForm
 from .models import Product
@@ -74,10 +75,10 @@ def create_product(request: HttpRequest):
 
 @csrf_exempt
 @require_POST
-def create_product_ajax(request: HttpRequest):
-    name = request.POST.get('name')
-    price = request.POST.get('price')
-    description = request.POST.get('description')
+def create_product_ajax(request):
+    name = strip_tags(request.POST.get('name'))
+    price = strip_tags(request.POST.get('price'))
+    description = strip_tags(request.POST.get('description'))
     user = request.user
 
     new_product = Product(
