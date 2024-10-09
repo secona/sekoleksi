@@ -721,19 +721,249 @@ Karena class `md:hidden`, `div` tersebut akan di-_apply_ style `hidden` jika uku
 
 ## :blue_book: Tugas 6
 
-### :arrow_left: Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+### :arrow_right: Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
 JavaScript adalah salah satu teknologi yang digunakan untuk pengembangan _frontend_. Bersama dengan HTML dan CSS, JavaScript mempunyai peran penting dalam menciptakan pengalaman pengguna yang dinamis dan interaktif. HTML bertugas untuk membangun struktur dasar aplikasi web, sementara CSS bertugas untuk mempercantik visual dari struktur tersebut. JavaScript, di sisi lain, memberikan fungsionalitas interaktif, memungkinkan pengguna untuk berinteraksi langsung dengan pengguna, memberikan pengalaman yang lebih hidup.
 
-### :arrow_left: Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
+### :arrow_right: Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
 Penggunaan `await` saat menggunakan `fetch()` berfungsi untuk menunggu hasil permintaan yang asinkron sebelum melanjutkan eksekusi kode yang sinkron. Seperti yang kita tahu, permintaan ke server tidak instan. Tanpa adanya penggunaan `await`, eksekusi kode akan lanjut tanpa menunggu hasil dari permintaan ke server. Alhasil, dapat terjadi kesalah saat mencoba untuk mengakses data yang belum tersedia. 
 
-### :arrow_left: Mengapa kita perlu menggunakan decorator `csrf_exempt` pada _view_ yang akan digunakan untuk AJAX `POST`?
-Decorator `csrf_exempt` digunakan untuk menonaktifkan perlindungan CSRF untuk view tersebut, sehingga permitnaan AJAX dapat dilakukan tanpa validasi token CSRF. Secara default, Django akan memblokir POST request tanpa ada token CSRF. Perilaku default ini sedikit mempersulit penggunaan AJAX `POST` di Django. Dengan demikian, untuk mendukung penggunaan AJAX `POST`, validasi token CSRF dinonaktifkan untuk _view_ tersebut.
+### :arrow_right: Mengapa kita perlu menggunakan decorator `csrf_exempt` pada _view_ yang akan digunakan untuk AJAX `POST`?
+Decorator `csrf_exempt` digunakan untuk menonaktifkan perlindungan CSRF untuk view tersebut, sehingga permitnaan AJAX `POST` dapat dilakukan tanpa validasi token CSRF. Secara default, Django akan memblokir POST request tanpa ada token CSRF. Perilaku default ini sedikit mempersulit penggunaan AJAX `POST` di Django. Pada umumnya, form dapat menggunakan `{% csrf_token %}`, tetapi untuk AJAX `POST` kita tidak dapat akses ke CSRF token tersebut. Dengan demikian, untuk mendukung penggunaan AJAX `POST`, validasi token CSRF dinonaktifkan untuk _view_ tersebut.
 
-### :arrow_left: Pada tutorial PBP minggu ini, pembersihan data _input_ pengguna dilakukan di belakang (_backend_) juga. Mengapa hal tersebut tidak dilakukan di _frontend_ saja?
+### :arrow_right: Pada tutorial PBP minggu ini, pembersihan data _input_ pengguna dilakukan di belakang (_backend_) juga. Mengapa hal tersebut tidak dilakukan di _frontend_ saja?
 Pembersihan data juga dilakukan di _backend_ untuk meminimalisasi masuknya data yang tidak bersih. Jika sebuah _view_ terdapat `csrf_exempt`, _view_ tersebut dapat dieksekusi melalui klien HTTP, seperti Postman. Dengan menggunakan Postman untuk melakukan permintaan ke server, kita dapat melewati pembersihan data yang dilakukan di _frontend_. Jika tidak ada pembersihan data _input_ di _backend_, penyerang dapat dengan mudah berinteraksi menggunakan Postman untuk memasukkan data-data yang tidak aman ke basis data. Dengan demikian, perlu juga dilakukan pembersihan data di _backend_.
 
-### :arrow_left: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
-TODO
+### :arrow_right: Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+#### :one: AJAX `GET`
+Pertama, mengubah fungsi `show_main` di `views.py` untuk tidak melakukan pengambilan data dari basis data. Kita ingin data diambil melalui pemanggilan AJAX di klien.
+
+Kedua, mengubah fungsi `show_xml` dan `show_json` untuk mengambil produk-produk untuk user yang sedang _logged in_. Ini dilakukan dengan menggunakan method `filter` pada `Product` dengan argumen `user=request.user`. Fungsi `show_json` akan dipanggil dari klien dalam bentuk permintaan AJAX.
+
+Ketiga, mengubah kode di `main.html` untuk melakukan permintaan AJAX `GET` untuk mengambil data-data produk. Sebelumnya, pengambilan data dilakukan di _server_ dan kode di `main.html` mengiterasikan untuk setiap produk. Perlu mendefinisikan dua fungsi JavaScript baru di klien, `getProducts`, untuk mengambil data melalui AJAX `GET`, dan `refreshProducts`, untuk menampilkan data.
+
+Implementasi fungsi `getProducts` menggunakan fungsi `fetch` pada JavaScript ke URL `show_json`. Lalu, respons dari server akan diubah menjadi JSON dengan _method_ `.json()`.
+
+```javascript
+async function getProducts() {
+    return fetch("{% url 'main:show_json' %}").then((res) => res.json());
+}
+```
+
+Implementasi fungsi `refreshProducts` menggunakan fungsi `getProducts`. Setelah data produk diambil menggunakan fungsi `getProducts`, data-data tersebut di iterasikan dan ditampilkan sebagai _child_ dari elemen `#product-cards`.
+
+```javascript
+  async function refreshProducts() {
+    const products = await getProducts();
+
+    let classNames = "";
+    let htmlString = "";
+
+    if (products.length === 0) {
+      classNames = "text-center bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-10 break-inside-avoid";
+      htmlString = `
+        <img src="{% static 'image/empty-list.png' %}" width="300" class="block mx-auto">
+        <p class="text-slate-600">Belum ada produk yang terdaftar</p>
+      `;
+    } else {
+      classNames = "columns-1 md:columns-2 lg:columns-3 xl:columns-4 space-y-3 gap-x-3";
+      products.forEach((product) => {
+        htmlString += `
+          <div class="flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-8 text-wrap break-inside-avoid">
+            <div class="flex flex-col max-w-md min-w-md">
+                <a href="/product/${product.pk}">
+                <h1 class="text-xl font-bold hover:underline">${DOMPurify.sanitize(product.fields.name)}</h1>
+              </a>
+              <h2 class="text-md mt-1">$${DOMPurify.sanitize(product.fields.price)}</h2>
+              <p class="text-gray-700 my-4 w-full">${DOMPurify.sanitize(product.fields.description)}</p>
+            </div>
+            <div class="flex flex-row justify-end items-center gap-3">
+              <a class="text-blue-600 hover:underline" href="/product/${product.pk}/edit">Edit</a>
+              <a class="text-blue-600 hover:underline" href="/product/${product.pk}/delete">Delete</a>
+            </div>
+          </div>
+        `;
+      })
+    }
+
+    productCards.innerHTML = htmlString;
+    productCards.className = classNames;
+  }
+```
+
+Terakhir, pada HTML diperlukan sebuah elemen yang berfungsi sebagai kontainer dari produk-produk. Elemen ini berupa div dengan id `product-cards`.
+
+#### :two: AJAX `POST`
+Pertama, perlu mendefinisikan fungsi di `views.py` untuk menambahkan produk menggunakan AJAX, yaitu `create_product_ajax`. Decorator untuk fungsi ini adalah `csrf_exempt` dan `require_POST`. Fungsi ini hanya dapat dipanggil melalui `POST` request. Fungsi ini akan mengambil data `name`, `price`, dan `description` dari _body request_, memasukkannya ke `ProductForm` dan menyimpannya jika data-data valid. Perlu juga fungsi `strip_tags` untuk setiap _field_ data untuk membersihkan supaya tidak ada serangan XSS. Lalu, fungsi tersebut dihubungkan ke URL `product-ajax` di `urls.py` dengan nama `create_product_ajax`.
+
+```python
+@csrf_exempt
+@require_POST
+def create_product_ajax(request):
+    product_form = ProductForm(
+        data={
+            "name": strip_tags(request.POST.get('name')),
+            "price": strip_tags(request.POST.get('price')),
+            "description": strip_tags(request.POST.get('description')),
+        },
+    )
+
+    if product_form.is_valid():
+        product = product_form.save(commit=False)
+        product.user = request.user
+        product.save()
+        return HttpResponse(b"CREATED", status=201)
+    else:
+        return HttpResponse(b"ERROR", status=400)
+```
+
+Kedua, perlu didefinisikan _method_ untuk melakukan pembersihan data pada `ProductForm`. _Method_ tersebut menggunakan fungsi `strip_tags` dan _raise_ error ketika _field_ tersebut ternyata berupa string kosong.
+
+```python
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'description']
+
+    def clean_name(self):
+        name = strip_tags(self.cleaned_data["name"])
+        if not name:
+            raise ValidationError("Name cannot be empty.")
+        return name
+
+    def clean_price(self):
+        price = strip_tags(self.cleaned_data["price"])
+        if not price:
+            raise ValidationError("Price cannot be empty.")
+        return price
+
+    def clean_description(self):
+        description = strip_tags(self.cleaned_data["description"])
+        if not description:
+            raise ValidationError("Description cannot be empty.")
+        return description
+```
+
+Ketiga, perlu didefinisikan fungsi JavaScript baru untuk menambahkan produk melalui AJAX `POST`, yaitu `addProduct`. Fungsi ini akan melakukan `POST` request ke URL `create_product_ajax`. Data untuk request akan berasal dari isi dari form `product-form`. Jika requeset tersebut mengembalikan kode status dalam range `2xx`, maka formnya direset, daftar produk di-_refresh_, dan form modal akan di-_hide_. Dengan demikian, halaman tidak perlu direfresh untuk mendapatkan data baru.
+
+```javascript
+  const productForm = document.getElementById("product-form");
+
+  async function addProduct() {
+    const res = await fetch("{% url 'main:create_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(productForm),
+    })
+
+    if (res.ok) {
+      productForm.reset();
+      refreshProducts();
+      hideModal();
+    }
+  }
+```
+
+Keempat, perlu menambahkan fungsi modal form pada HTML, yaitu `show_modal`, dan `hide_modal`. Fungsi `show_modal` akan menampilkan modal dengan menghilangkan class `hidden`. Fungsi `hide_modal` akan menghilangkan modal dengan menambahkan class `hidden`. Button baru juga perlu ditambahkan di mana `onclick` akan mengeksekusi fungsi `showModal()` untuk menampilkan modal. Form pada modal akan mengeksekusi fungsi `addProduct` ketika di-_submit_.
+
+```html
+<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-blue-600 hover:underline" onclick="showModal();">
+  Add New Product by AJAX
+</button>
+
+...
+
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+  <div id="crud-modal-content" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 border-b rounded-t">
+      <h3 class="text-xl font-semibold text-gray-900">
+        Add New Mood Entry
+      </h3>
+      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn" onclick="hideModal()">
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+    <!-- Modal body -->
+    <div class="px-6 py-4 space-y-6 form-style">
+      <form id="product-form" onsubmit="submitAddProduct">
+
+        <div class="w-full">
+          <label for="name" class="text-sm">
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+            placeholder="Berserk Deluxe Edition Vol. 1"
+          />
+        </div>
+
+        <div class="w-full">
+          <label for="price" class="text-sm">
+            Price
+          </label>
+          <input
+            id="price"
+            name="price"
+            type="text"
+            required
+            class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+            placeholder="60"
+          />
+        </div>
+
+        <div class="w-full">
+          <label for="description" class="text-sm">
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            rows="10"
+            cols="40"
+            type="text"
+            required
+            class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+            placeholder="Berserk is a dark fantasy manga that follows the brutal and tragic journey of Guts, a lone mercenary with a mysterious past, as he battles monstrous foes and struggles against fate in a violent medieval world."
+          ></textarea>
+        </div>
+
+        <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+          <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton" onclick="hideModal()">Cancel</button>
+          <button type="submit" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+```
+
+```javascript
+  const modal = document.getElementById("crud-modal");
+  const modalContent = document.getElementById("crud-modal-content");
+
+  function showModal() {
+    modal.classList.remove('hidden'); 
+    setTimeout(() => {
+      modalContent.classList.remove('opacity-0', 'scale-95');
+      modalContent.classList.add('opacity-100', 'scale-100');
+    }, 50); 
+  }
+
+  function hideModal() {
+    modalContent.classList.remove('opacity-100', 'scale-100');
+    modalContent.classList.add('opacity-0', 'scale-95');
+
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 150); 
+  }
+```
 
 </details>
