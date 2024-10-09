@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block meta %}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+{% endblock meta %}
+
 {% block content %}
 {% include 'navbar.html' %}
 
@@ -16,19 +20,204 @@
   <div class="w-full border-b border-gray-300 py-3 mb-5">
     <h1 class="text-3xl font-bold">Products</h1>
     <a class="text-blue-600 hover:underline" href="{% url 'main:create_product' %}">Add New Product</a>
+    &mdash;
+    <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-blue-600 hover:underline" onclick="showModal();">
+      Add New Product by AJAX
+    </button>
   </div>
 
-  {% if not products %}
-  <div class="text-center bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-10 break-inside-avoid">
-    <img src="{% static 'image/empty-list.png' %}" width="300" class="block mx-auto">
-    <p class="text-slate-600">Belum ada produk yang terdaftar</p>
-  </div>
-  {% else %}
-  <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 space-y-3 gap-x-3">
-    {% for product in products %}
-      {% include "components/product_card.html" with product=product %}
-    {% endfor %}
-  </div>
-  {% endif %}
+  <div id="product-cards"></div>
 </main>
+
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+  <div id="crud-modal-content" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 border-b rounded-t">
+      <h3 class="text-xl font-semibold text-gray-900">
+        Add New Mood Entry
+      </h3>
+      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn" onclick="hideModal()">
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+    <!-- Modal body -->
+    <div class="px-6 py-4 space-y-6 form-style">
+      <form id="product-form" onsubmit="submitAddProduct">
+
+        <div class="w-full" id="name-field">
+          <label for="name" class="text-sm">
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+            placeholder="Berserk Deluxe Edition Vol. 1"
+          />
+          <div id="name-field-error" class="mt-2 bg-rose-200 border-2 border-rose-300 rounded-lg px-4 py-2 hidden"></div>
+        </div>
+
+        <div class="w-full" id="price-field">
+          <label for="price" class="text-sm">
+            Price
+          </label>
+          <input
+            id="price"
+            name="price"
+            type="text"
+            required
+            class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+            placeholder="60"
+          />
+          <div id="price-field-error" class="mt-2 bg-rose-200 border-2 border-rose-300 rounded-lg px-4 py-2 hidden"></div>
+        </div>
+
+        <div class="w-full" id="description-field">
+          <label for="description" class="text-sm">
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            rows="10"
+            cols="40"
+            type="text"
+            required
+            class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
+            placeholder="Berserk is a dark fantasy manga that follows the brutal and tragic journey of Guts, a lone mercenary with a mysterious past, as he battles monstrous foes and struggles against fate in a violent medieval world."
+          ></textarea>
+          <div id="description-field-error" class="mt-2 bg-rose-200 border-2 border-rose-300 rounded-lg px-4 py-2 hidden"></div>
+        </div>
+
+        <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+          <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton" onclick="hideModal()">Cancel</button>
+          <button type="submit" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const productForm = document.getElementById("product-form");
+  const productCards = document.getElementById("product-cards");
+  const modal = document.getElementById("crud-modal");
+  const modalContent = document.getElementById("crud-modal-content");
+
+  const nameFieldError = document.getElementById("name-field-error");
+  const priceFieldError = document.getElementById("price-field-error");
+  const descriptionFieldError = document.getElementById("description-field-error");
+
+  async function getProducts() {
+    return fetch("{% url 'main:show_json' %}").then((res) => res.json());
+  }
+
+  async function addProduct() {
+    const res = await fetch("{% url 'main:create_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(productForm),
+    })
+
+    if (res.ok) {
+      productForm.reset();
+      refreshProducts();
+      hideModal();
+      return;
+    }
+
+    const body = await res.json();
+
+    if (body.name) {
+      nameFieldError.innerHTML = "<ul>" + body.name.map((error) => `<li>${error.message}</li>`).join("") + "</ul>";
+      nameFieldError.classList.remove("hidden");
+    } else {
+      nameFieldError.classList.add("hidden");
+    }
+
+    if (body.price) {
+      priceFieldError.innerHTML = "<ul>" + body.price.map((error) => `<li>${error.message}</li>`).join("") + "</ul>";
+      priceFieldError.classList.remove("hidden");
+    } else {
+      priceFieldError.classList.add("hidden");
+    }
+
+    if (body.description) {
+      descriptionFieldError.innerHTML = "<ul>" + body.description.map((error) => `<li>${error.message}</li>`).join("") + "</ul>";
+      descriptionFieldError.classList.remove("hidden");
+    } else {
+      descriptionFieldError.classList.add("hidden");
+    }
+  }
+
+  productForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    addProduct();
+  })
+
+  async function refreshProducts() {
+    const products = await getProducts();
+
+    let classNames = "";
+    let htmlString = "";
+
+    if (products.length === 0) {
+      classNames = "text-center bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-10 break-inside-avoid";
+      htmlString = `
+        <img src="{% static 'image/empty-list.png' %}" width="300" class="block mx-auto">
+        <p class="text-slate-600">Belum ada produk yang terdaftar</p>
+      `;
+    } else {
+      classNames = "columns-1 md:columns-2 lg:columns-3 xl:columns-4 space-y-3 gap-x-3";
+      products.forEach((product) => {
+        htmlString += `
+          <div class="flex flex-col bg-white rounded-lg border border-gray-200 shadow-sm py-6 px-8 text-wrap break-inside-avoid">
+            <div class="flex flex-col max-w-md min-w-md">
+                <a href="/product/${product.pk}">
+                <h1 class="text-xl font-bold hover:underline">${DOMPurify.sanitize(product.fields.name)}</h1>
+              </a>
+              <h2 class="text-md mt-1">$${DOMPurify.sanitize(product.fields.price)}</h2>
+              <p class="text-gray-700 my-4 w-full">${DOMPurify.sanitize(product.fields.description)}</p>
+            </div>
+            <div class="flex flex-row justify-end items-center gap-3">
+              <a class="text-blue-600 hover:underline" href="/product/${product.pk}/edit">Edit</a>
+              <a class="text-blue-600 hover:underline" href="/product/${product.pk}/delete">Delete</a>
+            </div>
+          </div>
+        `;
+      })
+    }
+
+    productCards.innerHTML = htmlString;
+    productCards.className = classNames;
+  }
+
+  function showModal() {
+    modal.classList.remove('hidden'); 
+    setTimeout(() => {
+      modalContent.classList.remove('opacity-0', 'scale-95');
+      modalContent.classList.add('opacity-100', 'scale-100');
+    }, 50); 
+  }
+
+  function hideModal() {
+    nameFieldError.classList.add("hidden");
+    priceFieldError.classList.add("hidden");
+    descriptionFieldError.classList.add("hidden");
+
+    modalContent.classList.remove('opacity-100', 'scale-100');
+    modalContent.classList.add('opacity-0', 'scale-95');
+
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 150); 
+  }
+
+  refreshProducts();
+</script>
+
 {% endblock content %}
