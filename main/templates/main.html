@@ -21,16 +21,16 @@
     <h1 class="text-3xl font-bold">Products</h1>
     <a class="text-blue-600 hover:underline" href="{% url 'main:create_product' %}">Add New Product</a>
     &mdash;
-    <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="text-blue-600 hover:underline" onclick="showModal();">
+    <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-blue-600 hover:underline" onclick="showModal();">
       Add New Product by AJAX
     </button>
   </div>
 
-  <div id="product-cards-container"></div>
+  <div id="product-cards"></div>
 </main>
 
-<div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
-  <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+  <div id="crud-modal-content" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 border-b rounded-t">
       <h3 class="text-xl font-semibold text-gray-900">
@@ -45,7 +45,7 @@
     </div>
     <!-- Modal body -->
     <div class="px-6 py-4 space-y-6 form-style">
-      <form id="product-form" onsubmit="(e) => submitAddProduct(e)">
+      <form id="product-form" onsubmit="submitAddProduct">
 
         <div class="w-full">
           <label for="name" class="text-sm">
@@ -101,6 +101,11 @@
 </div>
 
 <script>
+  const productForm = document.getElementById("product-form");
+  const productCards = document.getElementById("product-cards");
+  const modal = document.getElementById("crud-modal");
+  const modalContent = document.getElementById("crud-modal-content");
+
   async function getProducts() {
     return fetch("{% url 'main:show_json' %}").then((res) => res.json());
   }
@@ -108,26 +113,23 @@
   async function addProduct() {
     const res = await fetch("{% url 'main:create_product_ajax' %}", {
       method: "POST",
-      body: new FormData(document.querySelector('#product-form')),
+      body: new FormData(productForm),
     })
 
     if (res.ok) {
+      productForm.reset();
       refreshProducts();
-      document.getElementById("product-form").reset();
       hideModal();
     }
   }
 
-  document
-    .getElementById("product-form")
-    .addEventListener("submit", (e) => {
-      e.preventDefault();
-      addProduct();
-    })
+  productForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    addProduct();
+  })
 
   async function refreshProducts() {
     const products = await getProducts();
-    console.log(products)
 
     let classNames = "";
     let htmlString = "";
@@ -159,14 +161,11 @@
       })
     }
 
-    document.getElementById("product-cards-container").innerHTML = htmlString;
-    document.getElementById("product-cards-container").className = classNames;
+    productCards.innerHTML = htmlString;
+    productCards.className = classNames;
   }
 
   function showModal() {
-    const modal = document.getElementById('crudModal');
-    const modalContent = document.getElementById('crudModalContent');
-
     modal.classList.remove('hidden'); 
     setTimeout(() => {
       modalContent.classList.remove('opacity-0', 'scale-95');
@@ -175,9 +174,6 @@
   }
 
   function hideModal() {
-    const modal = document.getElementById('crudModal');
-    const modalContent = document.getElementById('crudModalContent');
-
     modalContent.classList.remove('opacity-100', 'scale-100');
     modalContent.classList.add('opacity-0', 'scale-95');
 
