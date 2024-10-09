@@ -849,6 +849,10 @@ Ketiga, perlu didefinisikan fungsi JavaScript baru untuk menambahkan produk mela
 ```javascript
   const productForm = document.getElementById("product-form");
 
+  const nameFieldError = document.getElementById("name-field-error");
+  const priceFieldError = document.getElementById("price-field-error");
+  const descriptionFieldError = document.getElementById("description-field-error");
+
   async function addProduct() {
     const res = await fetch("{% url 'main:create_product_ajax' %}", {
       method: "POST",
@@ -859,6 +863,30 @@ Ketiga, perlu didefinisikan fungsi JavaScript baru untuk menambahkan produk mela
       productForm.reset();
       refreshProducts();
       hideModal();
+      return;
+    }
+
+    const body = await res.json();
+
+    if (body.name) {
+      nameFieldError.innerHTML = "<ul>" + body.name.map((error) => `<li>${error.message}</li>`).join("") + "</ul>";
+      nameFieldError.classList.remove("hidden");
+    } else {
+      nameFieldError.classList.add("hidden");
+    }
+
+    if (body.price) {
+      priceFieldError.innerHTML = "<ul>" + body.price.map((error) => `<li>${error.message}</li>`).join("") + "</ul>";
+      priceFieldError.classList.remove("hidden");
+    } else {
+      priceFieldError.classList.add("hidden");
+    }
+
+    if (body.description) {
+      descriptionFieldError.innerHTML = "<ul>" + body.description.map((error) => `<li>${error.message}</li>`).join("") + "</ul>";
+      descriptionFieldError.classList.remove("hidden");
+    } else {
+      descriptionFieldError.classList.add("hidden");
     }
   }
 ```
@@ -890,7 +918,7 @@ Keempat, perlu menambahkan fungsi modal form pada HTML, yaitu `show_modal`, dan 
     <div class="px-6 py-4 space-y-6 form-style">
       <form id="product-form" onsubmit="submitAddProduct">
 
-        <div class="w-full">
+        <div class="w-full" id="name-field">
           <label for="name" class="text-sm">
             Name
           </label>
@@ -902,9 +930,10 @@ Keempat, perlu menambahkan fungsi modal form pada HTML, yaitu `show_modal`, dan 
             class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
             placeholder="Berserk Deluxe Edition Vol. 1"
           />
+          <div id="name-field-error" class="mt-2 bg-rose-200 border-2 border-rose-300 rounded-lg px-4 py-2 hidden"></div>
         </div>
 
-        <div class="w-full">
+        <div class="w-full" id="price-field">
           <label for="price" class="text-sm">
             Price
           </label>
@@ -916,9 +945,10 @@ Keempat, perlu menambahkan fungsi modal form pada HTML, yaitu `show_modal`, dan 
             class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
             placeholder="60"
           />
+          <div id="price-field-error" class="mt-2 bg-rose-200 border-2 border-rose-300 rounded-lg px-4 py-2 hidden"></div>
         </div>
 
-        <div class="w-full">
+        <div class="w-full" id="description-field">
           <label for="description" class="text-sm">
             Description
           </label>
@@ -932,6 +962,7 @@ Keempat, perlu menambahkan fungsi modal form pada HTML, yaitu `show_modal`, dan 
             class="p-2 outline-none border-2 border-gray-200 focus:border-black w-full rounded-lg"
             placeholder="Berserk is a dark fantasy manga that follows the brutal and tragic journey of Guts, a lone mercenary with a mysterious past, as he battles monstrous foes and struggles against fate in a violent medieval world."
           ></textarea>
+          <div id="description-field-error" class="mt-2 bg-rose-200 border-2 border-rose-300 rounded-lg px-4 py-2 hidden"></div>
         </div>
 
         <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
@@ -957,6 +988,10 @@ Keempat, perlu menambahkan fungsi modal form pada HTML, yaitu `show_modal`, dan 
   }
 
   function hideModal() {
+    nameFieldError.classList.add("hidden");
+    priceFieldError.classList.add("hidden");
+    descriptionFieldError.classList.add("hidden");
+
     modalContent.classList.remove('opacity-100', 'scale-100');
     modalContent.classList.add('opacity-0', 'scale-95');
 

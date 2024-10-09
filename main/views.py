@@ -90,7 +90,7 @@ def create_product_ajax(request):
         product.save()
         return HttpResponse(b"CREATED", status=201)
     else:
-        return HttpResponse(b"ERROR", status=400)
+        return HttpResponse(str(product_form.errors.as_json()), status=400)
 
 @login_required(login_url='/login')
 def show_product(request: HttpRequest, id):
