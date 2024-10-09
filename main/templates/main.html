@@ -32,9 +32,9 @@
 <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
   <div id="crud-modal-content" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
     <!-- Modal header -->
-    <div class="flex items-center justify-between p-4 border-b rounded-t">
+    <div class="flex items-center justify-between p-4 rounded-t">
       <h3 class="text-xl font-semibold text-gray-900">
-        Add New Mood Entry
+        Add New Product
       </h3>
       <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn" onclick="hideModal()">
         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -95,8 +95,8 @@
         </div>
 
         <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
-          <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton" onclick="hideModal()">Cancel</button>
-          <button type="submit" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+          <button type="button" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton" onclick="hideModal()">Cancel</button>
+          <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-lg">Save</button>
         </div>
       </form>
     </div>
