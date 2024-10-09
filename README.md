@@ -724,11 +724,17 @@ Karena class `md:hidden`, `div` tersebut akan di-_apply_ style `hidden` jika uku
 ### :arrow_right: Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
 JavaScript adalah salah satu teknologi yang digunakan untuk pengembangan _frontend_. Bersama dengan HTML dan CSS, JavaScript mempunyai peran penting dalam menciptakan pengalaman pengguna yang dinamis dan interaktif. HTML bertugas untuk membangun struktur dasar aplikasi web, sementara CSS bertugas untuk mempercantik visual dari struktur tersebut. JavaScript, di sisi lain, memberikan fungsionalitas interaktif, memungkinkan pengguna untuk berinteraksi langsung dengan pengguna, memberikan pengalaman yang lebih hidup.
 
+- https://www.w3schools.com/js/
+
 ### :arrow_right: Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
 Penggunaan `await` saat menggunakan `fetch()` berfungsi untuk menunggu hasil permintaan yang asinkron sebelum melanjutkan eksekusi kode yang sinkron. Seperti yang kita tahu, permintaan ke server tidak instan. Tanpa adanya penggunaan `await`, eksekusi kode akan lanjut tanpa menunggu hasil dari permintaan ke server. Alhasil, dapat terjadi kesalah saat mencoba untuk mengakses data yang belum tersedia. 
 
+- https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
 ### :arrow_right: Mengapa kita perlu menggunakan decorator `csrf_exempt` pada _view_ yang akan digunakan untuk AJAX `POST`?
 Decorator `csrf_exempt` digunakan untuk menonaktifkan perlindungan CSRF untuk view tersebut, sehingga permitnaan AJAX `POST` dapat dilakukan tanpa validasi token CSRF. Secara default, Django akan memblokir POST request tanpa ada token CSRF. Perilaku default ini sedikit mempersulit penggunaan AJAX `POST` di Django. Pada umumnya, form dapat menggunakan `{% csrf_token %}`, tetapi untuk AJAX `POST` kita tidak dapat akses ke CSRF token tersebut. Dengan demikian, untuk mendukung penggunaan AJAX `POST`, validasi token CSRF dinonaktifkan untuk _view_ tersebut.
+
+- https://docs.djangoproject.com/en/5.1/ref/csrf/
 
 ### :arrow_right: Pada tutorial PBP minggu ini, pembersihan data _input_ pengguna dilakukan di belakang (_backend_) juga. Mengapa hal tersebut tidak dilakukan di _frontend_ saja?
 Pembersihan data juga dilakukan di _backend_ untuk meminimalisasi masuknya data yang tidak bersih. Jika sebuah _view_ terdapat `csrf_exempt`, _view_ tersebut dapat dieksekusi melalui klien HTTP, seperti Postman. Dengan menggunakan Postman untuk melakukan permintaan ke server, kita dapat melewati pembersihan data yang dilakukan di _frontend_. Jika tidak ada pembersihan data _input_ di _backend_, penyerang dapat dengan mudah berinteraksi menggunakan Postman untuk memasukkan data-data yang tidak aman ke basis data. Dengan demikian, perlu juga dilakukan pembersihan data di _backend_.
