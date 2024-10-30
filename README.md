@@ -1,4 +1,4 @@
-# sekoleksi
+# sekoleksi test
 
 E-Commerce Application made with Django.
 
